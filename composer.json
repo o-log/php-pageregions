@@ -1,0 +1,17 @@
+{
+  "name": "o-log/php-pageregions",
+  "minimum-stability": "dev",
+  "repositories" : [],
+  "require" : {
+    "o-log/php-model" : "4.*",
+    "o-log/php-lib" : "1.*",
+    "o-log/php-bt" : "4.*",
+    "o-log/php-crud" : "dev-master"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "OLOG" : "",
+      "PageRegionsDemo" : ""
+    }
+  }
+}
