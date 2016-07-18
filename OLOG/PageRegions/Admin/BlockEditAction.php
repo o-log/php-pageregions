@@ -40,6 +40,10 @@ class BlockEditAction
                     )
                 ),
                 new CRUDFormRow(
+                    'Weight',
+                    new CRUDFormWidgetInput('weight')
+                ),
+                new CRUDFormRow(
                     'Published',
                     new CRUDFormWidgetRadios('is_published', [0 => 'No', 1 => 'Yes'])
                 ),

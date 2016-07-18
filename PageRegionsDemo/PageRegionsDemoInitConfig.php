@@ -30,6 +30,8 @@ class PageRegionsDemoInitConfig
     }
 
     static public function initConfig(){
+        
+
         PageRegionsConfig::setRegionsArr(
             [
                 'head' => 'head',

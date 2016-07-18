@@ -9,4 +9,5 @@ array (
 'alter table olog_pageregion_block add column info varchar(255) not null default "" /* rand908734 */;',
 'alter table olog_pageregion_block add column visible_only_for_administrators int not null default 0 /* rand7752345 */;',
 'alter table olog_pageregion_block add column execute_pseudocode int not null default 0 /* rand0993453 */;',
+'insert into olog_auth_permission (title) values ("PERMISSION_MODULENAME_MANAGE_NODES") /* 87673455 */;',
 )
