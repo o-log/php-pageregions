@@ -4,9 +4,11 @@ namespace PageRegionsDemo;
 
 use OLOG\Auth\AuthConfig;
 use OLOG\Auth\AuthConstants;
+use OLOG\BT\BTConfig;
 use OLOG\DB\DBConfig;
 use OLOG\DB\DBSettings;
 use OLOG\Model\ModelConstants;
+use OLOG\PageRegions\Admin\PageRegionsAdminMenu;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
 
@@ -34,5 +36,14 @@ class PageRegionsDemoInitConfig
                 'footer' => 'footer'
             ]
         );
+
+		BTConfig::setLayoutClassName(\OLOG\AdminLTE\Layout::class);
+		BTConfig::setBreadcrumbsPrefixArr([
+			\OLOG\BT\BT::a('', '', 'glyphicon glyphicon-home'),
+			\OLOG\BT\BT::a('', '', 'glyphicon glyphicon-wrench')
+		]);
+		BTConfig::setMenuClassesArr([
+			PageRegionsAdminMenu::class
+		]);
     }
 }

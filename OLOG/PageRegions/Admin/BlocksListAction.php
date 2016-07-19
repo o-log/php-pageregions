@@ -2,7 +2,12 @@
 
 namespace OLOG\PageRegions\Admin;
 
+use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\Auth\Operator;
+use OLOG\BT\BT;
+use OLOG\BT\InterfaceBreadcrumbs;
+use OLOG\BT\InterfacePageTitle;
+use OLOG\BT\InterfaceUserName;
 use OLOG\BT\Layout;
 use OLOG\ConfWrapper;
 use OLOG\CRUD\CRUDForm;
@@ -19,87 +24,113 @@ use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
 
-class BlocksListAction
+class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, InterfaceUserName
 {
-    static public function getUrl(){
-        return '/admin/blocks';
-    }
+	use CurrentUserNameTrait;
 
-    public function action(){
-        $html = '';
+	static public function getUrl()
+	{
+		return '/admin/blocks';
+	}
 
-        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
+	public function currentPageTitle()
+	{
+		return self::pageTitle();
+	}
 
-        /** @var PageRegionsConfig $config_obj */
-        /*
-        $config_obj = ConfWrapper::getRequiredValue(PageRegionConstants::MODULE_NAME);
+	static public function pageTitle()
+	{
+		return 'Блоки';
+	}
 
-        $regions_arr = $config_obj->getRegionsArr();
-        $regions_arr[PageRegionConstants::BLOCK_REGION_NONE] = 'Отключенные блоки';
+	public function currentBreadcrumbsArr()
+	{
+		return self::breadcrumbsArr();
+	}
 
-        foreach ($regions_arr as $region => $region_title) {
-            $blocks_ids_arr = BlockHelper::getBlocksIdsArrInRegion($region);
+	static public function breadcrumbsArr()
+	{
+		return [BT::a(self::getUrl(), self::pageTitle())];
+	}
 
-            $html .= '<p><span class="label label-default">' . $region_title . '</p>';
-            $html .= '<table class="table table-condensed">';
 
-            foreach ($blocks_ids_arr as $block_id) {
-                $block_obj = Block::factory($block_id);
 
-                $html .= '<tr>';
-                $html .= '<td width="50"><span class="text-muted" style="margin-right: 10px;">' . $block_obj->getId() . '</span></td>';
-                $html .= '<td><a href="/admin2/blocks/edit/' . $block_obj->getId() . '">' . $block_obj->getInfo() . '</a></td>';
+	public function action()
+	{
+		$html = '';
 
-                if ($region != PageRegionConstants::BLOCK_REGION_NONE) {
-                    $html .= '<td align="right"> ';
-                    $html .= '<a class="glyphicon glyphicon-remove" href="/admin2/blocks/list?a=disable&amp;block_id=' . $block_obj->getId() . '" title="Отключить"></a>';
-                    $html .= '</td>';
-                }
+		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
 
-                $html .= '</tr>';
-            }
-        }
+		/** @var PageRegionsConfig $config_obj */
+		/*
+		$config_obj = ConfWrapper::getRequiredValue(PageRegionConstants::MODULE_NAME);
 
-        $html .= '</table>';
-        */
+		$regions_arr = $config_obj->getRegionsArr();
+		$regions_arr[PageRegionConstants::BLOCK_REGION_NONE] = 'Отключенные блоки';
 
-        $new_block_obj = new Block();
+		foreach ($regions_arr as $region => $region_title) {
+			$blocks_ids_arr = BlockHelper::getBlocksIdsArrInRegion($region);
 
-        $html .= CRUDTable::html(
-            Block::class,
-            CRUDForm::html(
-                $new_block_obj,
-                [
-                    new CRUDFormRow(
-                        'info',
-                        new CRUDFormWidgetInput('info')
-                    )
-                ]
-            ),
-            [
-                new CRUDTableColumn(
-                    'Region',
-                    new CRUDTableWidgetText(
-                        '{this->region}'
-                    )
-                ),
-                new CRUDTableColumn(
-                    'Weight',
-                    new CRUDTableWidgetText(
-                        '{this->weight}'
-                    )
-                ),
-                new CRUDTableColumn(
-                    'Info',
-                    new CRUDTableWidgetTextWithLink(
-                        '{this->info}',
-                        BlockEditAction::getUrl('{this->id}')
-                    )
-                )
-            ]
-        );
+			$html .= '<p><span class="label label-default">' . $region_title . '</p>';
+			$html .= '<table class="table table-condensed">';
 
-        Layout::render($html, $this);
-        
-    }
+			foreach ($blocks_ids_arr as $block_id) {
+				$block_obj = Block::factory($block_id);
+
+				$html .= '<tr>';
+				$html .= '<td width="50"><span class="text-muted" style="margin-right: 10px;">' . $block_obj->getId() . '</span></td>';
+				$html .= '<td><a href="/admin2/blocks/edit/' . $block_obj->getId() . '">' . $block_obj->getInfo() . '</a></td>';
+
+				if ($region != PageRegionConstants::BLOCK_REGION_NONE) {
+					$html .= '<td align="right"> ';
+					$html .= '<a class="glyphicon glyphicon-remove" href="/admin2/blocks/list?a=disable&amp;block_id=' . $block_obj->getId() . '" title="Отключить"></a>';
+					$html .= '</td>';
+				}
+
+				$html .= '</tr>';
+			}
+		}
+
+		$html .= '</table>';
+		*/
+
+		$new_block_obj = new Block();
+
+		$html .= CRUDTable::html(
+			Block::class,
+			CRUDForm::html(
+				$new_block_obj,
+				[
+					new CRUDFormRow(
+						'info',
+						new CRUDFormWidgetInput('info')
+					)
+				]
+			),
+			[
+				new CRUDTableColumn(
+					'Region',
+					new CRUDTableWidgetText(
+						'{this->region}'
+					)
+				),
+				new CRUDTableColumn(
+					'Weight',
+					new CRUDTableWidgetText(
+						'{this->weight}'
+					)
+				),
+				new CRUDTableColumn(
+					'Info',
+					new CRUDTableWidgetTextWithLink(
+						'{this->info}',
+						BlockEditAction::getUrl('{this->id}')
+					)
+				)
+			]
+		);
+
+		Layout::render($html, $this);
+
+	}
 }
