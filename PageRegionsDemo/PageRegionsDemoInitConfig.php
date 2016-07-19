@@ -37,7 +37,6 @@ class PageRegionsDemoInitConfig
             ]
         );
 
-		BTConfig::setLayoutClassName(\OLOG\AdminLTE\Layout::class);
 		BTConfig::setBreadcrumbsPrefixArr([
 			\OLOG\BT\BT::a('', '', 'glyphicon glyphicon-home'),
 			\OLOG\BT\BT::a('', '', 'glyphicon glyphicon-wrench')
