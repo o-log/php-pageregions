@@ -2,6 +2,8 @@
 
 namespace OLOG\PageRegions\Admin;
 
+use OLOG\Auth\Auth;
+use OLOG\Auth\Operator;
 use OLOG\BT\Layout;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
@@ -11,8 +13,11 @@ use OLOG\CRUD\CRUDFormWidgetOptions;
 use OLOG\CRUD\CRUDFormWidgetRadios;
 use OLOG\CRUD\CRUDFormWidgetTextarea;
 use OLOG\CRUD\CRUDTable;
+use OLOG\Exits;
 use OLOG\PageRegions\Block;
+use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
+use OLOG\PageRegions\Permissions;
 
 class BlockEditAction
 {
@@ -23,6 +28,8 @@ class BlockEditAction
 
     public function action($block_id)
     {
+        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions(Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS));
+
         $block_obj = Block::factory($block_id);
 
         $html = CRUDForm::html(

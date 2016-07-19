@@ -3,11 +3,11 @@
   "minimum-stability": "dev",
   "repositories" : [],
   "require" : {
-    "o-log/php-model" : "4.*",
+    "o-log/php-model" : "5.*",
     "o-log/php-lib" : "1.*",
-    "o-log/php-bt" : "4.*",
-    "o-log/php-crud" : "dev-master",
-    "o-log/php-auth" : "dev-master"
+    "o-log/php-bt" : "5.*",
+    "o-log/php-crud" : "1.*",
+    "o-log/php-auth" : "1.*"
   },
   "autoload" : {
     "psr-0" : {

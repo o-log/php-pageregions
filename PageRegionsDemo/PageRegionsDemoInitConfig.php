@@ -2,35 +2,31 @@
 
 namespace PageRegionsDemo;
 
+use OLOG\Auth\AuthConfig;
+use OLOG\Auth\AuthConstants;
+use OLOG\DB\DBConfig;
+use OLOG\DB\DBSettings;
 use OLOG\Model\ModelConstants;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
 
 class PageRegionsDemoInitConfig
 {
-    static public function getOldConfig(){
-        // for mac
+    static public function initConfig(){
         header('Content-Type: text/html; charset=utf-8');
         date_default_timezone_set('Europe/Moscow');
 
-        $c = [];
+        DBConfig::setDBSettingsObj(
+            AuthConstants::DB_NAME_PHPAUTH,
+            new DBSettings('localhost', 'db_pageregions', 'root', '1', 'vendor/o-log/php-auth/db_phpauth.sql')
+        );
 
-        $c[ModelConstants::MODULE_CONFIG_ROOT_KEY] = [
-            'db' => [
-                PageRegionConstants::DB_ID => [
-                    'host' => 'localhost',
-                    'db_name' => 'db_pageregions',
-                    'user' => 'root',
-                    'pass' => '1'
-                ]
-            ]
-        ];
+        DBConfig::setDBSettingsObj(
+            PageRegionConstants::DB_ID,
+            new DBSettings('localhost', 'db_pageregions', 'root', '1')
+        );
 
-        return $c;
-    }
-
-    static public function initConfig(){
-        
+        AuthConfig::setFullAccessCookieName('lkjdhfglkjdsgf');
 
         PageRegionsConfig::setRegionsArr(
             [

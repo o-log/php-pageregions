@@ -2,6 +2,7 @@
 
 namespace OLOG\PageRegions\Admin;
 
+use OLOG\Auth\Operator;
 use OLOG\BT\Layout;
 use OLOG\ConfWrapper;
 use OLOG\CRUD\CRUDForm;
@@ -11,10 +12,12 @@ use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableColumn;
 use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
+use OLOG\Exits;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\BlockHelper;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
+use OLOG\PageRegions\Permissions;
 
 class BlocksListAction
 {
@@ -24,6 +27,8 @@ class BlocksListAction
 
     public function action(){
         $html = '';
+
+        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions(Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS));
 
         /** @var PageRegionsConfig $config_obj */
         /*
