@@ -28,7 +28,7 @@ class BlocksListAction
     public function action(){
         $html = '';
 
-        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions(Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS));
+        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
 
         /** @var PageRegionsConfig $config_obj */
         /*

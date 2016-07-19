@@ -8,5 +8,3 @@ require_once "../vendor/autoload.php";
 \OLOG\PageRegions\RegisterRoutes::registerRoutes();
 
 \OLOG\Router::matchAction(\PageRegionsDemo\Pages\MainPageAction::class, 0);
-
-

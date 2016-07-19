@@ -28,7 +28,7 @@ class BlockEditAction
 
     public function action($block_id)
     {
-        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions(Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS));
+        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
 
         $block_obj = Block::factory($block_id);
 
