@@ -2,7 +2,7 @@
 
 namespace OLOG\PageRegions;
 
-use OLOG\Model\ActiveRecord;
+use OLOG\Model\ActiveRecordTrait;
 use OLOG\Model\FactoryTrait;
 use OLOG\Model\InterfaceDelete;
 use OLOG\Model\InterfaceFactory;
@@ -16,7 +16,7 @@ InterfaceLoad,
 InterfaceSave,
 InterfaceDelete
 {
-    use ActiveRecord;
+    use ActiveRecordTrait;
     use FactoryTrait;
     use WeightTrait;
 
