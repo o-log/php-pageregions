@@ -8,13 +8,15 @@ use OLOG\Model\InterfaceDelete;
 use OLOG\Model\InterfaceFactory;
 use OLOG\Model\InterfaceLoad;
 use OLOG\Model\InterfaceSave;
+use OLOG\Model\InterfaceWeight;
 use OLOG\Model\WeightTrait;
 
 class Block implements
 InterfaceFactory,
 InterfaceLoad,
 InterfaceSave,
-InterfaceDelete
+InterfaceDelete,
+InterfaceWeight
 {
     use ActiveRecordTrait;
     use FactoryTrait;
@@ -26,7 +28,7 @@ InterfaceDelete
     protected $id;
     protected $created_at_ts = 0; // TODO: initialize in constructor
     protected $is_published = 0;
-    protected $weight = 1;
+    protected $weight;
     protected $region = '';
     protected $pages = '+ ^';
     protected $cache = 8; // TODO: constants
@@ -34,6 +36,10 @@ InterfaceDelete
     protected $info = '';
     protected $visible_only_for_administrators = 0;
     protected $execute_pseudocode = 0;
+
+    public function beforeSave(){
+        $this->initWeight(['region' => $this->getRegion()]);
+    }
 
     /*
     public static function afterUpdate($id)

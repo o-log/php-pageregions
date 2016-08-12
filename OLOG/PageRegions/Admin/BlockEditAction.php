@@ -88,6 +88,10 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 					'Body',
 					new CRUDFormWidgetAceTextarea('body')
 				),
+                new CRUDFormRow(
+                    'Execute pseudocode',
+                    new CRUDFormWidgetRadios('execute_pseudocode', [0 => 'No', 1 => 'Yes'])
+                ),
 				new CRUDFormRow(
 					'Pages',
 					new CRUDFormWidgetTextarea('pages')

@@ -53,8 +53,6 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
 		return [BT::a(self::getUrl(), self::pageTitle())];
 	}
 
-
-
 	public function action()
 	{
 		$html = '';
@@ -94,6 +92,10 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
 		$html .= '</table>';
 		*/
 
+		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
+		    $html .= '<div>' . BT::a(RegionBlocksListAction::getUrl($region_name), $region_name) . '</div>';
+        }
+
 		$new_block_obj = new Block();
 
 		$html .= CRUDTable::html(
@@ -127,7 +129,9 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
 						BlockEditAction::getUrl('{this->id}')
 					)
 				)
-			]
+			],
+            [],
+            'region, weight'
 		);
 
 		Layout::render($html, $this);

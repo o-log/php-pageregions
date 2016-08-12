@@ -7,8 +7,7 @@ class Pseudocode
     const TAG_CALL_METHOD_START = '##@call_method';
     const TAG_CALL_METHOD_END = '##@call_method_end';
 
-    protected static $callable_by_method_name_arr = array(
-    );
+    //protected static $callable_by_method_name_arr = array();
 
     /**
      * Проверить текст блока на наличие псевдокода
@@ -80,19 +79,23 @@ class Pseudocode
     /**
      * Вызвать метод
      *
-     * @param string $method_name
+     * @param string $method_callable
      * @param array $params_arr
      * @return string
      */
-    protected static function callMethod($method_name, $params_arr)
+    protected static function callMethod($method_callable, $params_arr)
     {
+        /*
         if (!array_key_exists($method_name, self::$callable_by_method_name_arr)) {
             return 'Неправильный метод: ' . $method_name;
         }
 
         $callable = self::$callable_by_method_name_arr[$method_name];
+        */
 
-        $result = call_user_func_array($callable, $params_arr);
+
+
+        $result = call_user_func_array($method_callable, $params_arr);
         return $result;
     }
 
@@ -101,8 +104,10 @@ class Pseudocode
      *
      * @return array
      */
+    /*
     public static function getMethodNamesArr()
     {
         return array_keys(self::$callable_by_method_name_arr);
     }
+    */
 }
