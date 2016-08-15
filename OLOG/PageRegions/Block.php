@@ -2,6 +2,7 @@
 
 namespace OLOG\PageRegions;
 
+use OLOG\DB\DBWrapper;
 use OLOG\Model\ActiveRecordTrait;
 use OLOG\Model\FactoryTrait;
 use OLOG\Model\InterfaceDelete;
@@ -39,6 +40,19 @@ InterfaceWeight
 
     public function beforeSave(){
         $this->initWeight(['region' => $this->getRegion()]);
+
+        if (!is_null($this->getId())){
+            $old_region = DBWrapper::readColumn(
+                Block::DB_ID,
+                'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
+                [$this->getId()]
+            );
+
+            if ($old_region != $this->getRegion()){
+                $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
+                $this->setWeight($max_weight_in_new_region + 1);
+            }
+        }
     }
 
     /*

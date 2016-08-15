@@ -44,7 +44,7 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
 
     static public function pageTitleFroRegion($region_name)
     {
-        return 'Блоки ' . $region_name;
+        return 'Регион ' . $region_name;
     }
 
     public function currentBreadcrumbsArr()
@@ -54,7 +54,10 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
 
     static public function breadcrumbsArrForRegion($region_name)
     {
-        return [BT::a(self::getUrl($region_name), self::pageTitleFroRegion($region_name))];
+        return array_merge(BlocksListAction::breadcrumbsArr(),
+            [
+            BT::a(self::getUrl($region_name), self::pageTitleFroRegion($region_name))
+        ]);
     }
 
     public function action($region_name)

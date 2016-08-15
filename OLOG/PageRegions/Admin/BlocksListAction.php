@@ -92,9 +92,13 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
 		$html .= '</table>';
 		*/
 
+        $html .= '<h2>Регионы</h2>';
+
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
 		    $html .= '<div>' . BT::a(RegionBlocksListAction::getUrl($region_name), $region_name) . '</div>';
         }
+
+        $html .= '<h2>Все блоки</h2>';
 
 		$new_block_obj = new Block();
 

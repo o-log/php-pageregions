@@ -51,7 +51,14 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 
 	static public function breadcrumbsArr($block_id)
 	{
-		return array_merge(BlocksListAction::breadcrumbsArr(), [BT::a(self::getUrl($block_id), self::pageTitle($block_id))]);
+	    $base_arr = BlocksListAction::breadcrumbsArr();
+
+        $block_obj = Block::factory($block_id);
+        if ($block_obj->getRegion() != ''){
+            $base_arr = RegionBlocksListAction::breadcrumbsArrForRegion($block_obj->getRegion());
+        }
+
+		return array_merge($base_arr, [BT::a(self::getUrl($block_id), self::pageTitle($block_id))]);
 	}
 
 	public function action($block_id)
@@ -73,7 +80,10 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 					'Region',
 					new CRUDFormWidgetOptions(
 						'region',
-						PageRegionsConfig::getRegionsArr()
+						array_merge(
+						    ['' => ''],
+						    PageRegionsConfig::getRegionsArr()
+                        )
 					)
 				),
 				new CRUDFormRow(
@@ -102,6 +112,10 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 				),
 			]
 		);
+
+        $html .= '<h2>Rendered block</h2>';
+
+        $html .= '<div style="border: 5px solid red;">' . $block_obj->renderBlockContent() . '</div>';
 
 		Layout::render($html, $this);
 	}

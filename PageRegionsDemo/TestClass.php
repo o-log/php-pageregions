@@ -4,7 +4,7 @@ namespace PageRegionsDemo;
 
 class TestClass
 {
-    public function testMethod(){
+    static public function testMethod(){
         return 'TEST OK';
     }
 }
