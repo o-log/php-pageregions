@@ -124,7 +124,7 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 				),
 				new CRUDFormRow(
 					'Cache',
-					new CRUDFormWidgetInput('cache')
+					new CRUDFormWidgetOptions('cache', PageRegionConstants::CACHE_ARR)
 				),
 			]
 		);
