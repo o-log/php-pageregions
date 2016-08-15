@@ -18,6 +18,7 @@ use OLOG\CRUD\CRUDFormWidgetOptions;
 use OLOG\CRUD\CRUDFormWidgetRadios;
 use OLOG\CRUD\CRUDFormWidgetTextarea;
 use OLOG\CRUD\CRUDTable;
+use OLOG\CRUD\CRUDTableWidgetDelete;
 use OLOG\Exits;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionConstants;
@@ -53,7 +54,11 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 	{
 	    $base_arr = BlocksListAction::breadcrumbsArr();
 
-        $block_obj = Block::factory($block_id);
+        $block_obj = Block::factory($block_id, false);
+        if (is_null($block_obj)){
+            return [];
+        }
+
         if ($block_obj->getRegion() != ''){
             $base_arr = RegionBlocksListAction::breadcrumbsArrForRegion($block_obj->getRegion());
         }
@@ -67,9 +72,20 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 
 		$this->block_id = $block_id;
 
-		$block_obj = Block::factory($block_id);
+        $html = '';
+        $block_obj = Block::factory($block_id, false); // block may be deleted
+        if (is_null($block_obj)){
+            $html .= '<div class="alert">Блок не найден. ' . BT::a(BlocksListAction::getUrl(), 'Перейти к списку блоков') . '.</div>';
+            Layout::render($html, $this);
+            return;
+        }
 
-		$html = CRUDForm::html(
+        CRUDTable::executeOperations();
+
+        $delete_widget_obj = new CRUDTableWidgetDelete();
+        $html .= '<div>' . $delete_widget_obj->html($block_obj) . '</div>';
+
+		$html .= CRUDForm::html(
 			$block_obj,
 			[
 				new CRUDFormRow(
