@@ -2,6 +2,7 @@
 
 namespace OLOG\PageRegions;
 
+use OLOG\Cache\CacheWrapper;
 use OLOG\DB\DBWrapper;
 use OLOG\Model\ActiveRecordTrait;
 use OLOG\Model\FactoryTrait;
@@ -49,10 +50,25 @@ InterfaceWeight
             );
 
             if ($old_region != $this->getRegion()){
-                $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
-                $this->setWeight($max_weight_in_new_region + 1);
+                $this->processRegionChange($old_region);
             }
         }
+    }
+
+    public function processRegionChange($old_region){
+
+        // инициализируем вес в новом регионе
+
+        $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
+        $this->setWeight($max_weight_in_new_region + 1);
+
+        // сбрасываем кэша регионов
+
+        $old_region_cache_key = BlockHelper::getBlocksIdsArrInRegion($old_region);
+        CacheWrapper::delete($old_region_cache_key);
+
+        $new_region_cache_key = BlockHelper::getBlocksIdsArrInRegion($this->getRegion());
+        CacheWrapper::delete($new_region_cache_key);
     }
 
     /*
