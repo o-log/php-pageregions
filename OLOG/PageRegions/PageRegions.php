@@ -6,6 +6,8 @@ use OLOG\Url;
 
 class PageRegions
 {
+    const INVISIBLE_BLOCKS_DEBUG_COOKIE_NAME = 'invisible_blocks_debug';
+
     static public function checkBlockComplexVisibility($block_id, $real_path = '')
     {
         $block_obj = Block::factory($block_id);
@@ -61,21 +63,23 @@ class PageRegions
 
         $output = '';
 
-        $blocks_ids_arr = self::getVisibleBlocksIdsArr($region, $page_url);
+        $invisible_block_ids_arr = [];
+
+        $blocks_ids_arr = self::getVisibleBlocksIdsArr($region, $page_url, $invisible_block_ids_arr);
 
         foreach ($blocks_ids_arr as $block_id) {
-            /*
-            $output .= Render::template2('templates/block.tpl.php', array(
-                'block_id' => $block_id
-            ));
-            */
             $block_content = BlockHelper::getContentByBlockId($block_id);
             if ($block_content != '') {
                 $output .= '<!-- ' . $block_id . ' -->';
                 $output .= $block_content;
                 $output .= '<!-- /' . $block_id . ' -->';
             }
+        }
 
+        if (isset($_COOKIE[self::INVISIBLE_BLOCKS_DEBUG_COOKIE_NAME])) {
+            foreach ($invisible_block_ids_arr as $block_id => $block_comment) {
+                $output .= '<!-- invisible block ' . $block_id . ': ' . $block_comment . ' -->';
+            }
         }
 
         return $output;
@@ -87,7 +91,7 @@ class PageRegions
      * @param string $page_url
      * @return array
      */
-    static function getVisibleBlocksIdsArr($region, $page_url = '')
+    static function getVisibleBlocksIdsArr($region, $page_url = '', &$invisible_block_ids_arr = [])
     {
         if ($page_url == '') {
             // Берем url без $_GET параметров, т.к. это влияет на видимость блоков.
@@ -102,7 +106,9 @@ class PageRegions
         $has_access_to_blocks_for_administrators = BlockHelper::currentUserHasAccessToBlocksForAdministrators();
 
         foreach ($blocks_ids_arr as $block_id) {
-            if (!self::blockIsVisibleOnPage($block_id, $page_url, $has_access_to_blocks_for_administrators)) {
+            $comment = 'not visible';
+            if (!self::blockIsVisibleOnPage($block_id, $page_url, $has_access_to_blocks_for_administrators, $comment)) {
+                $invisible_block_ids_arr[$block_id] = $comment;
                 continue;
             }
             $visible_blocks_ids_arr[] = $block_id;
@@ -117,21 +123,24 @@ class PageRegions
      * @param $has_access_to_blocks_for_administrators
      * @return bool
      */
-    public static function blockIsVisibleOnPage($block_id, $page_url, $has_access_to_blocks_for_administrators = false)
+    public static function blockIsVisibleOnPage($block_id, $page_url, $has_access_to_blocks_for_administrators = false, &$out_comment = '')
     {
         $block_obj = Block::factory($block_id);
 
         if (!$block_obj->getIsPublished()) {
+            $out_comment = 'not published';
             return false;
         }
 
         // Проверяем блок на видимость только для администраторов
         if (!$has_access_to_blocks_for_administrators && $block_obj->isVisibleOnlyForAdministrators()) {
+            $out_comment = 'block for admins only';
             return false;
         }
 
         // Match path if necessary
         if ($block_obj->getPages()) {
+            $out_comment = 'visibility check';
             return self::checkBlockComplexVisibility($block_id, $page_url);
         }
 

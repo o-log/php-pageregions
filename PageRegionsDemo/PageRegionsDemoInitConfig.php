@@ -38,8 +38,7 @@ class PageRegionsDemoInitConfig
         );
 
 		BTConfig::setBreadcrumbsPrefixArr([
-			\OLOG\BT\BT::a('', '', 'glyphicon glyphicon-home'),
-			\OLOG\BT\BT::a('', '', 'glyphicon glyphicon-wrench')
+			\OLOG\BT\BT::a('/', '', 'glyphicon glyphicon-home'),
 		]);
 		BTConfig::setMenuClassesArr([
 			PageRegionsAdminMenu::class

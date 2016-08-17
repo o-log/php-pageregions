@@ -131,7 +131,9 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 
         $html .= '<h2>Rendered block</h2>';
 
-        $html .= '<div style="border: 5px solid red;">' . $block_obj->renderBlockContent() . '</div>';
+        $html .= '<div style="border: 5px solid red;">';
+        $html .= $block_obj->renderBlockContent();
+        $html .= '</div>';
 
 		Layout::render($html, $this);
 	}

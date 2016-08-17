@@ -43,7 +43,7 @@ InterfaceWeight
         $this->initWeight(['region' => $this->getRegion()]);
 
         if (!is_null($this->getId())){
-            $old_region = DBWrapper::readColumn(
+            $old_region = DBWrapper::readField(
                 Block::DB_ID,
                 'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
                 [$this->getId()]
