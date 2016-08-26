@@ -120,7 +120,20 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
                 ),
 				new CRUDFormRow(
 					'Pages',
-					new CRUDFormWidgetTextarea('pages')
+					new CRUDFormWidgetTextarea('pages'),
+                    '<p>Одна строка - один фильтр. Каждый фильтр должен начинаться с символов + или - и потом проблела.</p>
+                    <p>После символа + или - и пробела указывается маска адреса. + включает показ блока на этих адресах, а - выключает.</p>
+                    <p>Вот пример фильтра для болка, который показывается на всех страницах CS:GO, кроме Dreamhack.</p>
+<pre>
++ csgo
+- csgo/dreamhack
+</pre>
+                    <p>Маска - это регулярное выражение.</p>
+
+                    <p>Т.е. "csgo/dreamhack" - это значит csgo/dreamhack может входить в адрес в любом месте.</p>
+                    <p>"^/csgo/dreamhack" - это значит должно входить именно в начале адреса.</p>
+                    <p>Адреса начинаются со "/".</p>
+                    <p>Главная страница - это "^/$".</p>'
 				),
 				new CRUDFormRow(
 					'Cache',
