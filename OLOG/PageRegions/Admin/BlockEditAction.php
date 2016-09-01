@@ -112,7 +112,15 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
 				),
 				new CRUDFormRow(
 					'Body',
-					new CRUDFormWidgetAceTextarea('body')
+					new CRUDFormWidgetAceTextarea('body'),
+                    '<p>Пример вызова php-метода:</p>
+<pre>
+##@call_method
+\Components\RightColumnTeasersList\RightColumnTeasersListComponent::getHtml
+##@call_method_end
+</pre>
+<p>Если метод принимает параметры - их можно указать после имени метода, значение каждого параметра - на отдельной строке.</p>
+'
 				),
                 new CRUDFormRow(
                     'Execute pseudocode',
