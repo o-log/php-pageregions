@@ -48,7 +48,7 @@ class BlockHelper
      * @param int $block_id
      * @return string|null
      */
-    protected static function getBlockContentCacheKey($block_id)
+    public static function getBlockContentCacheKey($block_id)
     {
         $block_obj = Block::factory($block_id);
 

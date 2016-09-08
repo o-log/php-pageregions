@@ -14,11 +14,11 @@ use OLOG\Model\InterfaceWeight;
 use OLOG\Model\WeightTrait;
 
 class Block implements
-InterfaceFactory,
-InterfaceLoad,
-InterfaceSave,
-InterfaceDelete,
-InterfaceWeight
+    InterfaceFactory,
+    InterfaceLoad,
+    InterfaceSave,
+    InterfaceDelete,
+    InterfaceWeight
 {
     use ActiveRecordTrait;
     use FactoryTrait;
@@ -41,34 +41,34 @@ InterfaceWeight
 
     public function beforeSave(){
         $this->initWeight(['region' => $this->getRegion()]);
+        $this->dropCache();
+    }
+
+    public function processRegionChange(){
+        // инициализируем вес в новом регионе
+        $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
+        $this->setWeight($max_weight_in_new_region + 1);
+    }
+
+    public function dropCache(){
 
         if (!is_null($this->getId())){
+
+            CacheWrapper::delete( BlockHelper::getBlockContentCacheKey( $this->getId()) );
             $old_region = DBWrapper::readField(
                 Block::DB_ID,
                 'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
                 [$this->getId()]
             );
-
             if ($old_region != $this->getRegion()){
-                $this->processRegionChange($old_region);
+                $this->processRegionChange();
             }
+            $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
+            CacheWrapper::delete($key);
         }
-    }
+        $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
+        CacheWrapper::delete($key);
 
-    public function processRegionChange($old_region){
-
-        // инициализируем вес в новом регионе
-
-        $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
-        $this->setWeight($max_weight_in_new_region + 1);
-
-        // сбрасываем кэша регионов
-
-        $old_region_cache_key = BlockHelper::getBlocksIdsArrInRegion($old_region);
-        CacheWrapper::delete($old_region_cache_key);
-
-        $new_region_cache_key = BlockHelper::getBlocksIdsArrInRegion($this->getRegion());
-        CacheWrapper::delete($new_region_cache_key);
     }
 
     /*
