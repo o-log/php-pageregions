@@ -44,7 +44,7 @@ class Block implements
         $this->dropCache();
     }
 
-    public function processRegionChange(){
+    public function setWeightRegion(){
         // инициализируем вес в новом регионе
         $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
         $this->setWeight($max_weight_in_new_region + 1);
@@ -62,9 +62,10 @@ class Block implements
             );
             if ($old_region != $this->getRegion()){
                 $this->processRegionChange();
+                $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
+                CacheWrapper::delete($key);
             }
-            $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
-            CacheWrapper::delete($key);
+
         }
         $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
         CacheWrapper::delete($key);
@@ -79,15 +80,17 @@ class Block implements
         $block_obj = Block::factory($id);
         Logger::logObjectEvent($block_obj, 'изменение');
     }
+      */
 
     public function afterDelete()
     {
+        self::dropCache();
         self::removeObjFromCacheById($this->getId());
         BlockHelper::clearBlocksIdsArrInRegionCache($this->getRegion());
 
-        Logger::logObjectEvent($this, 'удаление');
+
     }
-    */
+
 
     /**
      * Был ли загружен блок
