@@ -61,15 +61,15 @@ class Block implements
                 [$this->getId()]
             );
             if ($old_region != $this->getRegion()){
-                $this->processRegionChange();
+                $this->setWeightRegion();
                 $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
                 CacheWrapper::delete($key);
             }
 
         }
+
         $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
         CacheWrapper::delete($key);
-
     }
 
     /*
@@ -86,9 +86,6 @@ class Block implements
     {
         self::dropCache();
         self::removeObjFromCacheById($this->getId());
-        BlockHelper::clearBlocksIdsArrInRegionCache($this->getRegion());
-
-
     }
 
 
