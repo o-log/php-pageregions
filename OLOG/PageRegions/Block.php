@@ -59,9 +59,9 @@ class Block implements
     protected function getOldGegion(){
 
         static $old_region;
-        static $checked;
+        static $has_old_region_in_cache = false;
 
-        if(!empty($checked)){
+        if($has_old_region_in_cache){
             return $old_region;
         }
 
@@ -70,7 +70,7 @@ class Block implements
             'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
             [$this->getId()]
         );
-        $checked = true;
+        $has_old_region_in_cache = true;
         return $old_region;
     }
 
