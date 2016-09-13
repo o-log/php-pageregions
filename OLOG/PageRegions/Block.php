@@ -41,6 +41,12 @@ class Block implements
 
     public function beforeSave(){
         $this->initWeight(['region' => $this->getRegion()]);
+
+        $old_region = $old_region = $this->getOldGegion();
+
+        if ($old_region != $this->getRegion()){
+            $this->setWeightRegion();
+        }
         $this->dropCache();
     }
 
@@ -50,18 +56,28 @@ class Block implements
         $this->setWeight($max_weight_in_new_region + 1);
     }
 
+    protected function getOldGegion(){
+
+        static $old_region;
+
+        if(!empty($old_region))
+            return $old_region;
+
+        $old_region = DBWrapper::readField(
+            Block::DB_ID,
+            'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
+            [$this->getId()]
+        );
+        return $old_region;
+    }
+
     public function dropCache(){
 
         if (!is_null($this->getId())){
 
             CacheWrapper::delete( BlockHelper::getBlockContentCacheKey( $this->getId()) );
-            $old_region = DBWrapper::readField(
-                Block::DB_ID,
-                'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
-                [$this->getId()]
-            );
+            $old_region = $this->getOldGegion();
             if ($old_region != $this->getRegion()){
-                $this->setWeightRegion();
                 $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
                 CacheWrapper::delete($key);
             }
