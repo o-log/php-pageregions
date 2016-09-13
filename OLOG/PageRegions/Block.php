@@ -59,15 +59,18 @@ class Block implements
     protected function getOldGegion(){
 
         static $old_region;
+        static $checked;
 
-        if(!empty($old_region))
+        if(!empty($checked)){
             return $old_region;
+        }
 
         $old_region = DBWrapper::readField(
             Block::DB_ID,
             'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
             [$this->getId()]
         );
+        $checked = true;
         return $old_region;
     }
 
