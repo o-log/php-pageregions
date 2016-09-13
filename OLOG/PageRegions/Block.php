@@ -42,7 +42,7 @@ class Block implements
     public function beforeSave(){
         $this->initWeight(['region' => $this->getRegion()]);
 
-        $old_region = $old_region = $this->getOldGegion();
+        $old_region = $this->getOldGegion();
 
         if ($old_region != $this->getRegion()){
             $this->setWeightRegion();
