@@ -41,13 +41,37 @@ class Block implements
 
     public function beforeSave(){
         $this->initWeight(['region' => $this->getRegion()]);
+
+        $old_region = $this->getOldGegion();
+
+        if ($old_region != $this->getRegion()){
+            $this->setWeightRegion();
+        }
         $this->dropCache();
     }
 
-    public function processRegionChange(){
+    public function setWeightRegion(){
         // инициализируем вес в новом регионе
         $max_weight_in_new_region = self::getMaxWeightForContext(['region' => $this->getRegion()]);
         $this->setWeight($max_weight_in_new_region + 1);
+    }
+
+    protected function getOldGegion(){
+
+        static $old_region;
+        static $has_old_region_in_cache = false;
+
+        if($has_old_region_in_cache){
+            return $old_region;
+        }
+
+        $old_region = DBWrapper::readField(
+            Block::DB_ID,
+            'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
+            [$this->getId()]
+        );
+        $has_old_region_in_cache = true;
+        return $old_region;
     }
 
     public function dropCache(){
@@ -55,20 +79,16 @@ class Block implements
         if (!is_null($this->getId())){
 
             CacheWrapper::delete( BlockHelper::getBlockContentCacheKey( $this->getId()) );
-            $old_region = DBWrapper::readField(
-                Block::DB_ID,
-                'select region from ' . Block::DB_TABLE_NAME . ' where id = ?',
-                [$this->getId()]
-            );
+            $old_region = $this->getOldGegion();
             if ($old_region != $this->getRegion()){
-                $this->processRegionChange();
+                $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
+                CacheWrapper::delete($key);
             }
-            $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
-            CacheWrapper::delete($key);
+
         }
+
         $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
         CacheWrapper::delete($key);
-
     }
 
     /*
@@ -79,15 +99,14 @@ class Block implements
         $block_obj = Block::factory($id);
         Logger::logObjectEvent($block_obj, 'изменение');
     }
+      */
 
     public function afterDelete()
     {
+        self::dropCache();
         self::removeObjFromCacheById($this->getId());
-        BlockHelper::clearBlocksIdsArrInRegionCache($this->getRegion());
-
-        Logger::logObjectEvent($this, 'удаление');
     }
-    */
+
 
     /**
      * Был ли загружен блок
