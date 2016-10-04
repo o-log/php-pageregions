@@ -16,6 +16,7 @@ use OLOG\CRUD\CRUDFormWidgetInput;
 use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableColumn;
 use OLOG\CRUD\CRUDTableFilter;
+use OLOG\CRUD\CRUDTableFilterEqualInvisible;
 use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
 use OLOG\CRUD\CRUDTableWidgetWeight;
@@ -107,7 +108,7 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
                 )
             ],
             [
-                new CRUDTableFilter('region', CRUDTableFilter::FILTER_EQUAL, $region_name)
+                new CRUDTableFilterEqualInvisible('region', $region_name)
             ],
             'weight'
         );
