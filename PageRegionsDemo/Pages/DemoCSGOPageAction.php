@@ -12,7 +12,7 @@ namespace PageRegionsDemo\Pages;
 use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\BT\InterfacePageTitle;
 use OLOG\BT\InterfaceUserName;
-use OLOG\BT\Layout;
+use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\PageRegions\PageRegions;
 
 class DemoCSGOPageAction implements InterfacePageTitle, InterfaceUserName
@@ -37,6 +37,6 @@ class DemoCSGOPageAction implements InterfacePageTitle, InterfaceUserName
         $html .= PageRegions::renderRegion('head'); // TODO: replace with actual region ID
         $html .= '</div></div>';
 
-        Layout::render($html);
+        AdminLayoutSelector::render($html);
     }
 }

@@ -6,7 +6,7 @@ use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\BT\BT;
 use OLOG\BT\InterfacePageTitle;
 use OLOG\BT\InterfaceUserName;
-use OLOG\BT\Layout;
+use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\PageRegions\Admin\BlocksListAction;
 use OLOG\PageRegions\PageRegions;
 
@@ -37,6 +37,6 @@ class MainPageAction implements InterfacePageTitle, InterfaceUserName
 
         $html .= '<div>You can set ' . PageRegions::INVISIBLE_BLOCKS_DEBUG_COOKIE_NAME . ' cookie to see invisible blocks debug in html comments.</div>';
 
-		Layout::render($html);
+		AdminLayoutSelector::render($html);
 	}
 }

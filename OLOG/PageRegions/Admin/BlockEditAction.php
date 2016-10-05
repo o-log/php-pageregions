@@ -3,13 +3,11 @@
 namespace OLOG\PageRegions\Admin;
 
 use OLOG\Auth\Admin\CurrentUserNameTrait;
-use OLOG\Auth\Auth;
 use OLOG\Auth\Operator;
 use OLOG\BT\BT;
 use OLOG\BT\InterfaceBreadcrumbs;
 use OLOG\BT\InterfacePageTitle;
 use OLOG\BT\InterfaceUserName;
-use OLOG\BT\Layout;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetAceTextarea;
@@ -20,6 +18,7 @@ use OLOG\CRUD\CRUDFormWidgetTextarea;
 use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableWidgetDelete;
 use OLOG\Exits;
+use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
@@ -76,7 +75,7 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
         $block_obj = Block::factory($block_id, false); // block may be deleted
         if (is_null($block_obj)){
             $html .= '<div class="alert">Блок не найден. ' . BT::a(BlocksListAction::getUrl(), 'Перейти к списку блоков') . '.</div>';
-            Layout::render($html, $this);
+            AdminLayoutSelector::render($html, $this);
             return;
         }
 
@@ -156,6 +155,6 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
         $html .= $block_obj->renderBlockContent();
         $html .= '</div>';
 
-		Layout::render($html, $this);
+		AdminLayoutSelector::render($html, $this);
 	}
 }
