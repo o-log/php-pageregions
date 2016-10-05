@@ -5,8 +5,10 @@ namespace PageRegionsDemo;
 use OLOG\Auth\AuthConfig;
 use OLOG\Auth\AuthConstants;
 use OLOG\BT\BTConfig;
+use OLOG\BT\LayoutBootstrap;
 use OLOG\DB\DBConfig;
 use OLOG\DB\DBSettings;
+use OLOG\Layouts\LayoutsConfig;
 use OLOG\Model\ModelConstants;
 use OLOG\PageRegions\Admin\PageRegionsAdminMenu;
 use OLOG\PageRegions\PageRegionConstants;
@@ -37,11 +39,15 @@ class PageRegionsDemoInitConfig
             ]
         );
 
+        /*
 		BTConfig::setBreadcrumbsPrefixArr([
 			\OLOG\BT\BT::a('/', '', 'glyphicon glyphicon-home'),
 		]);
 		BTConfig::setMenuClassesArr([
 			PageRegionsAdminMenu::class
 		]);
+        */
+
+        LayoutsConfig::setAdminLayoutClassName(LayoutBootstrap::class);
     }
 }
