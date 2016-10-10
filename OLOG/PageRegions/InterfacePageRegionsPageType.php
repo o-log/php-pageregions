@@ -4,5 +4,5 @@ namespace OLOG\PageRegions;
 
 interface InterfacePageRegionsPageType
 {
-	public function getPageRegionsPageType();
+	public function pageRegionsPageType();
 }
