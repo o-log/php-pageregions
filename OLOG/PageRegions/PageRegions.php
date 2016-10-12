@@ -197,19 +197,24 @@ class PageRegions
             return false;
         }
 
+        $visible = false;
+
         // Match path if necessary
         if ($block_obj->getPages()) {
             $out_comment = 'url visibility check';
             $visible = self::checkBlockComplexVisibility($block_id, $page_url);
             if (!$visible){
-                return false;
+                return false; // do not check further
             }
         }
 
         // Match path if necessary
         if ($block_obj->getPageTypesFilter()) {
             $out_comment = 'page types visibility check';
-            return self::matchBlockPageTypes($block_id);
+            $visible = self::matchBlockPageTypes($block_id);
+            if (!$visible){
+                return false; // do not check further
+            }
         }
 
         return $visible;
