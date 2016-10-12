@@ -125,9 +125,9 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
                     'Execute pseudocode',
                     new CRUDFormWidgetRadios('execute_pseudocode', [0 => 'No', 1 => 'Yes'])
                 ),
-				new CRUDFormRow(
-					'Pages',
-					new CRUDFormWidgetTextarea('pages'),
+                new CRUDFormRow(
+                    'Pages',
+                    new CRUDFormWidgetTextarea('pages'),
                     '<p>Одна строка - один фильтр. Каждый фильтр должен начинаться с символов + или - и потом пробела.</p>
                     <p>После символа + или - и пробела указывается маска адреса. + включает показ блока на этих адресах, а - выключает.</p>
                     <p>Вот пример фильтра для болка, который показывается на всех страницах CS:GO, кроме Dreamhack.</p>
@@ -141,7 +141,11 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
                     <p>"^/csgo/dreamhack" - это значит должно входить именно в начале адреса.</p>
                     <p>Адреса начинаются со "/".</p>
                     <p>Главная страница - это "^/$".</p>'
-				),
+                ),
+                new CRUDFormRow(
+                    'Page types',
+                    new CRUDFormWidgetTextarea(Block::_PAGE_TYPES_FILTER)
+                ),
 				new CRUDFormRow(
 					'Cache',
 					new CRUDFormWidgetOptions('cache', PageRegionConstants::CACHE_ARR)

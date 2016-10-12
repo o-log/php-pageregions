@@ -6,13 +6,22 @@ use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\BT\BT;
 use OLOG\BT\InterfacePageTitle;
 use OLOG\BT\InterfaceUserName;
+use OLOG\HTML;
 use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\PageRegions\Admin\BlocksListAction;
+use OLOG\PageRegions\InterfacePageRegionsPageType;
 use OLOG\PageRegions\PageRegions;
 
-class MainPageAction implements InterfacePageTitle, InterfaceUserName
+class MainPageAction implements
+    InterfacePageTitle,
+    InterfaceUserName,
+    InterfacePageRegionsPageType
 {
 	use CurrentUserNameTrait;
+
+    public function pageRegionsPageType(){
+        return 'main_page';
+    }
 
 	static public function getUrl()
 	{
@@ -36,6 +45,8 @@ class MainPageAction implements InterfacePageTitle, InterfaceUserName
 		$html .= '</div></div>';
 
         $html .= '<div>You can set ' . PageRegions::INVISIBLE_BLOCKS_DEBUG_COOKIE_NAME . ' cookie to see invisible blocks debug in html comments.</div>';
+
+        $html .= '<div>Page type: ' . $this->pageRegionsPageType() . '</div>';
 
 		AdminLayoutSelector::render($html);
 	}

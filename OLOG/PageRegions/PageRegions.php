@@ -2,6 +2,7 @@
 
 namespace OLOG\PageRegions;
 
+use OLOG\Router;
 use OLOG\Url;
 
 class PageRegions
@@ -36,6 +37,64 @@ class PageRegions
                 $filter_obj = FilterFactory::getFilter($page_filter_str);
 
                 if ($filter_obj->matchesPage($real_path)) {
+                    if ($filter_obj->is_positive) {
+                        $visible = TRUE;
+                    }
+
+                    if ($filter_obj->is_negative) {
+                        $visible = FALSE;
+                    }
+                }
+
+            }
+        }
+
+        return $visible;
+    }
+
+    static public function getCurrentPageType(){
+        $current_page_type = '';
+
+        $current_action_obj = Router::getCurrentActionObj();
+        if ($current_action_obj){
+            if ($current_action_obj instanceof InterfacePageRegionsPageType){
+                $current_page_type = $current_action_obj->pageRegionsPageType();
+            }
+        }
+
+        return $current_page_type;
+    }
+
+    static public function matchBlockPageTypes($block_id)
+    {
+        $current_page_type = self::getCurrentPageType();
+
+        $block_obj = Block::factory($block_id);
+        $page_types = $block_obj->getPageTypesFilter();
+
+        // parse
+
+        $page_types = str_replace("\r", "\n", $page_types);
+        $page_types = str_replace("\n\n", "\n", $page_types);
+
+        $page_types_arr = explode("\n", $page_types);
+
+        if (count($page_types_arr) == 0) {
+            return false;
+        }
+
+        // check
+
+        $visible = false;
+
+        foreach ($page_types_arr as $page_filter_str) {
+            $page_filter_str = trim($page_filter_str);
+
+            if (strlen($page_filter_str) > 2) {
+                // convert filter string to object
+                $filter_obj = FilterFactory::getFilter($page_filter_str);
+
+                if ($filter_obj->matchesPage($current_page_type)) {
                     if ($filter_obj->is_positive) {
                         $visible = TRUE;
                     }
@@ -140,8 +199,17 @@ class PageRegions
 
         // Match path if necessary
         if ($block_obj->getPages()) {
-            $out_comment = 'visibility check';
-            return self::checkBlockComplexVisibility($block_id, $page_url);
+            $out_comment = 'url visibility check';
+            $visible = self::checkBlockComplexVisibility($block_id, $page_url);
+            if (!$visible){
+                return false;
+            }
+        }
+
+        // Match path if necessary
+        if ($block_obj->getPageTypesFilter()) {
+            $out_comment = 'page types visibility check';
+            return self::matchBlockPageTypes($block_id);
         }
 
         return false;
