@@ -212,7 +212,7 @@ class PageRegions
             return self::matchBlockPageTypes($block_id);
         }
 
-        return false;
+        return $visible;
     }
 
     /**
