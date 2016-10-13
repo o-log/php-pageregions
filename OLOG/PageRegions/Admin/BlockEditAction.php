@@ -8,6 +8,7 @@ use OLOG\BT\BT;
 use OLOG\BT\InterfaceBreadcrumbs;
 use OLOG\BT\InterfacePageTitle;
 use OLOG\BT\InterfaceUserName;
+use OLOG\BT\Layout;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetAceTextarea;
@@ -18,7 +19,6 @@ use OLOG\CRUD\CRUDFormWidgetTextarea;
 use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableWidgetDelete;
 use OLOG\Exits;
-use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
@@ -75,7 +75,7 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
         $block_obj = Block::factory($block_id, false); // block may be deleted
         if (is_null($block_obj)){
             $html .= '<div class="alert">Блок не найден. ' . BT::a(BlocksListAction::getUrl(), 'Перейти к списку блоков') . '.</div>';
-            AdminLayoutSelector::render($html, $this);
+	        Layout::render($html, $this);
             return;
         }
 
@@ -144,7 +144,14 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
                 ),
                 new CRUDFormRow(
                     'Page types',
-                    new CRUDFormWidgetTextarea(Block::_PAGE_TYPES_FILTER)
+                    new CRUDFormWidgetTextarea(Block::_PAGE_TYPES_FILTER),
+	                '<p>Одна строка - один фильтр. Каждый фильтр должен начинаться с символов + или - и потом пробела.</p>
+					<p>После символа + или - и пробела указывается маска адреса.</p>
+                    <p>Вот пример фильтра для болка, который показывается на всех типах страниц Article, кроме Main.</p>
+<pre>
++ ^Article$
+- ^Main$
+</pre>'
                 ),
 				new CRUDFormRow(
 					'Cache',
@@ -159,6 +166,6 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
         $html .= $block_obj->renderBlockContent();
         $html .= '</div>';
 
-		AdminLayoutSelector::render($html, $this);
+		Layout::render($html, $this);
 	}
 }
