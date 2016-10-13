@@ -8,6 +8,7 @@ use OLOG\BT\BT;
 use OLOG\BT\InterfaceBreadcrumbs;
 use OLOG\BT\InterfacePageTitle;
 use OLOG\BT\InterfaceUserName;
+use OLOG\BT\Layout;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetInput;
@@ -18,7 +19,6 @@ use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
 use OLOG\CRUD\CRUDTableWidgetWeight;
 use OLOG\Exits;
-use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\Permissions;
 
@@ -82,6 +82,12 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
                 ]
             ),
             [
+	            new CRUDTableColumn(
+		            'ID',
+		            new CRUDTableWidgetText(
+			            '{this->id}'
+		            )
+	            ),
                 new CRUDTableColumn(
                     'Region',
                     new CRUDTableWidgetText(
@@ -108,6 +114,6 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
             'weight'
         );
 
-        AdminLayoutSelector::render($html, $this);
+	    Layout::render($html, $this);
     }
 }
