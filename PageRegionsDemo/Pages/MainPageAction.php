@@ -38,7 +38,7 @@ class MainPageAction implements
 		$html = '';
 
         $html .= '<div>' . BT::a(DemoCSGOPageAction::getUrl(), 'Demo CSGO page') . '</div>';
-        $html .= '<div>' . BT::a(BlocksListAction::getUrl(), 'Blocks admin') . '</div>';
+        $html .= '<div>' . BT::a((new BlocksListAction())->url(), 'Blocks admin') . '</div>';
 
 		$html .= '<div class="panel panel-default"><div class="panel-heading">head</div><div class="panel-body">';
 		$html .= PageRegions::renderRegion('head'); // TODO: replace with actual region ID
