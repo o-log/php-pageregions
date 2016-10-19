@@ -2,13 +2,7 @@
 
 namespace OLOG\PageRegions\Admin;
 
-use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\Auth\Operator;
-use OLOG\BT\BT;
-use OLOG\BT\InterfaceBreadcrumbs;
-use OLOG\BT\InterfacePageTitle;
-use OLOG\BT\InterfaceUserName;
-use OLOG\BT\Layout;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetAceTextarea;
@@ -19,63 +13,61 @@ use OLOG\CRUD\CRUDFormWidgetTextarea;
 use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableWidgetDelete;
 use OLOG\Exits;
+use OLOG\HTML;
+use OLOG\InterfaceAction;
+use OLOG\Layouts\AdminLayoutSelector;
+use OLOG\Layouts\InterfacePageTitle;
+use OLOG\Layouts\InterfaceTopActionObj;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
 
-class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, InterfaceUserName
+class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
+    InterfaceAction,
+    InterfacePageTitle,
+    InterfaceTopActionObj
 {
-	use CurrentUserNameTrait;
 	protected $block_id;
 
-	static public function getUrl($block_id = '(\d+)')
+    public function topActionObj()
+    {
+        // TODO: send to region when block in region
+
+        return new BlocksListAction();
+    }
+
+    public function __construct($block_id)
+    {
+        $this->block_id = $block_id;
+    }
+
+    public function url()
+    {
+        return '/admin/block/' . $this->block_id;
+    }
+
+    static public function urlMask()
+    {
+        return '/admin/block/(\d+)';
+    }
+
+    public function pageTitle()
 	{
-		return '/admin/block/' . $block_id;
+		return 'Блоки ' . $this->block_id;
 	}
 
-	public function currentPageTitle()
-	{
-		return self::pageTitle($this->block_id);
-	}
-
-	static public function pageTitle($block_id)
-	{
-		return 'Блоки ' . $block_id;
-	}
-
-	public function currentBreadcrumbsArr()
-	{
-		return self::breadcrumbsArr($this->block_id);
-	}
-
-	static public function breadcrumbsArr($block_id)
-	{
-	    $base_arr = BlocksListAction::breadcrumbsArr();
-
-        $block_obj = Block::factory($block_id, false);
-        if (is_null($block_obj)){
-            return [];
-        }
-
-        if ($block_obj->getRegion() != ''){
-            $base_arr = RegionBlocksListAction::breadcrumbsArrForRegion($block_obj->getRegion());
-        }
-
-		return array_merge($base_arr, [BT::a(self::getUrl($block_id), self::pageTitle($block_id))]);
-	}
-
-	public function action($block_id)
+	public function action()
 	{
 		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
 
-		$this->block_id = $block_id;
+        $block_id = $this->block_id;
 
         $html = '';
         $block_obj = Block::factory($block_id, false); // block may be deleted
         if (is_null($block_obj)){
-            $html .= '<div class="alert">Блок не найден. ' . BT::a(BlocksListAction::getUrl(), 'Перейти к списку блоков') . '.</div>';
-	        Layout::render($html, $this);
+            $html .= '<div class="alert">Блок не найден. ' . HTML::a((new BlocksListAction())->url(), 'Перейти к списку блоков') . '.</div>';
+	        AdminLayoutSelector::render($html, $this);
             return;
         }
 
@@ -166,6 +158,6 @@ class BlockEditAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inter
         $html .= $block_obj->renderBlockContent();
         $html .= '</div>';
 
-		Layout::render($html, $this);
+		AdminLayoutSelector::render($html, $this);
 	}
 }

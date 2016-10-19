@@ -6,6 +6,8 @@ use OLOG\Auth\AuthConfig;
 use OLOG\Auth\AuthConstants;
 use OLOG\BT\BTConfig;
 use OLOG\BT\LayoutBootstrap;
+use OLOG\Cache\CacheConfig;
+use OLOG\Cache\MemcacheServerSettings;
 use OLOG\DB\DBConfig;
 use OLOG\DB\DBSettings;
 use OLOG\Layouts\LayoutsConfig;
@@ -30,7 +32,11 @@ class PageRegionsDemoInitConfig
             new DBSettings('localhost', 'db_pageregions', 'root', '1')
         );
 
+        CacheConfig::addServerSettingsObj(new MemcacheServerSettings('localhost', 11211));
+
         AuthConfig::setFullAccessCookieName('lkjdhfglkjdsgf');
+
+        AuthConfig::setAdminActionsBaseClassname(PageregionsDemoAdminActionsBase::class);
 
         PageRegionsConfig::setRegionsArr(
             [
@@ -38,6 +44,8 @@ class PageRegionsDemoInitConfig
                 'footer' => 'footer'
             ]
         );
+
+        PageRegionsConfig::setAdminActionsBaseClassname(PageregionsDemoAdminActionsBase::class);
 
         /*
 		BTConfig::setBreadcrumbsPrefixArr([

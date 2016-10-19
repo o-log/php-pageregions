@@ -2,13 +2,8 @@
 
 namespace OLOG\PageRegions\Admin;
 
-use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\Auth\Operator;
-use OLOG\BT\BT;
-use OLOG\BT\InterfaceBreadcrumbs;
-use OLOG\BT\InterfacePageTitle;
-use OLOG\BT\InterfaceUserName;
-use OLOG\BT\Layout;
+use OLOG\Layouts\InterfaceTopActionObj;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetInput;
@@ -19,48 +14,49 @@ use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
 use OLOG\CRUD\CRUDTableWidgetWeight;
 use OLOG\Exits;
+use OLOG\InterfaceAction;
+use OLOG\Layouts\AdminLayoutSelector;
+use OLOG\Layouts\InterfacePageTitle;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\Permissions;
 
-class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, InterfaceUserName
+class RegionBlocksListAction extends PageregionsAdminActionsBaseProxy implements
+    InterfaceAction,
+    InterfacePageTitle,
+    InterfaceTopActionObj
 {
-    use CurrentUserNameTrait;
-
     protected $region_name;
 
-    static public function getUrl($region_name = '(\w+)')
+    public function topActionObj()
     {
-        return '/admin/regionblocks/' . $region_name;
+        return new BlocksListAction();
     }
 
-    public function currentPageTitle()
+    public function __construct($region_name)
     {
-        return self::pageTitleForRegion($this->region_name);
+        $this->region_name = $region_name;
     }
 
-    static public function pageTitleForRegion($region_name)
+    public function url()
     {
-        return 'Регион ' . $region_name;
+        return '/admin/regionblocks/' . $this->region_name;
     }
 
-    public function currentBreadcrumbsArr()
+    static public function urlMask()
     {
-        return self::breadcrumbsArrForRegion($this->region_name);
+        return '/admin/regionblocks/(\w+)';
     }
 
-    static public function breadcrumbsArrForRegion($region_name)
+    public function pageTitle()
     {
-        return array_merge(BlocksListAction::breadcrumbsArr(),
-            [
-            BT::a(self::getUrl($region_name), self::pageTitleForRegion($region_name))
-        ]);
+        return 'Регион ' . $this->region_name;
     }
 
-    public function action($region_name)
+    public function action()
     {
         Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
 
-        $this->region_name = $region_name;
+        $region_name = $this->region_name;
         $html = '';
 
         $new_block_obj = new Block();
@@ -104,7 +100,7 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
                     'Info',
                     new CRUDTableWidgetTextWithLink(
                         '{this->info}',
-                        BlockEditAction::getUrl('{this->id}')
+                        (new BlockEditAction('{this->id}'))->url()
                     )
                 )
             ],
@@ -114,6 +110,6 @@ class RegionBlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle
             'weight'
         );
 
-	    Layout::render($html, $this);
+	    AdminLayoutSelector::render($html, $this);
     }
 }

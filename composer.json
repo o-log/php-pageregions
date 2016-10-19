@@ -1,16 +1,6 @@
 {
   "name": "o-log/php-pageregions",
   "minimum-stability": "dev",
-  "repositories" : [
-    {
-      "type": "git",
-      "url": "https://github.com/o-log/php-html"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/o-log/php-layouts"
-    }
-  ],
   "require" : {
     "o-log/php-model" : "6.*",
     "o-log/php-lib" : "1.*",

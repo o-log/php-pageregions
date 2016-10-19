@@ -2,15 +2,23 @@
 
 namespace OLOG\PageRegions\Admin;
 
-use OLOG\BT\InterfaceMenu;
-use OLOG\BT\MenuItem;
+use OLOG\Auth\Auth;
+use OLOG\Layouts\InterfaceMenu;
+use OLOG\Layouts\MenuItem;
 
 class PageRegionsAdminMenu implements InterfaceMenu
 {
 	static public function menuArr()
 	{
-		return [
-			new MenuItem(BlocksListAction::pageTitle(), BlocksListAction::getUrl(), NULL, 'glyphicon glyphicon-pushpin')
-		];
+	    $menu_arr = [];
+
+        if (Auth::currentUserHasAnyOfPermissions([])) {
+
+            $menu_arr = array_merge($menu_arr, [
+                new MenuItem((new BlocksListAction())->pageTitle(), (new BlocksListAction())->url(), NULL, 'glyphicon glyphicon-pushpin')
+            ]);
+        }
+
+        return $menu_arr;
 	}
 }

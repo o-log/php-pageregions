@@ -2,13 +2,7 @@
 
 namespace OLOG\PageRegions\Admin;
 
-use OLOG\Auth\Admin\CurrentUserNameTrait;
 use OLOG\Auth\Operator;
-use OLOG\BT\BT;
-use OLOG\BT\InterfaceBreadcrumbs;
-use OLOG\BT\InterfacePageTitle;
-use OLOG\BT\InterfaceUserName;
-use OLOG\BT\Layout;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetInput;
@@ -17,37 +11,26 @@ use OLOG\CRUD\CRUDTableColumn;
 use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
 use OLOG\Exits;
+use OLOG\HTML;
+use OLOG\InterfaceAction;
+use OLOG\Layouts\AdminLayoutSelector;
+use OLOG\Layouts\InterfacePageTitle;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
 
-class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, InterfaceUserName
+class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
+    InterfaceAction,
+    InterfacePageTitle
 {
-	use CurrentUserNameTrait;
-
-	static public function getUrl()
+	public function url()
 	{
 		return '/admin/blocks';
 	}
 
-	public function currentPageTitle()
-	{
-		return self::pageTitle();
-	}
-
-	static public function pageTitle()
+	public function pageTitle()
 	{
 		return 'Блоки';
-	}
-
-	public function currentBreadcrumbsArr()
-	{
-		return self::breadcrumbsArr();
-	}
-
-	static public function breadcrumbsArr()
-	{
-		return [BT::a(self::getUrl(), self::pageTitle())];
 	}
 
 	public function action()
@@ -92,7 +75,7 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
         $html .= '<h2>Регионы</h2>';
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
-		    $html .= '<div>' . BT::a(RegionBlocksListAction::getUrl($region_name), $region_name) . '</div>';
+		    $html .= '<div>' . HTML::a((new RegionBlocksListAction($region_name))->url(), $region_name) . '</div>';
         }
 
         $html .= '<h2>Все блоки</h2>';
@@ -127,7 +110,7 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
 					'Info',
 					new CRUDTableWidgetTextWithLink(
 						'{this->info}',
-						BlockEditAction::getUrl('{this->id}')
+                        (new BlockEditAction('{this->id}'))->url()
 					)
 				)
 			],
@@ -135,6 +118,6 @@ class BlocksListAction implements InterfaceBreadcrumbs, InterfacePageTitle, Inte
             'region, weight'
 		);
 
-		Layout::render($html, $this);
+		AdminLayoutSelector::render($html, $this);
 	}
 }
