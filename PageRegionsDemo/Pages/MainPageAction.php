@@ -2,23 +2,17 @@
 
 namespace PageRegionsDemo\Pages;
 
-use OLOG\Auth\Admin\CurrentUserNameTrait;
-use OLOG\BT\BT;
-use OLOG\BT\InterfacePageTitle;
-use OLOG\BT\InterfaceUserName;
 use OLOG\HTML;
 use OLOG\Layouts\AdminLayoutSelector;
+use OLOG\Layouts\InterfacePageTitle;
 use OLOG\PageRegions\Admin\BlocksListAction;
 use OLOG\PageRegions\InterfacePageRegionsPageType;
 use OLOG\PageRegions\PageRegions;
 
 class MainPageAction implements
     InterfacePageTitle,
-    InterfaceUserName,
     InterfacePageRegionsPageType
 {
-	use CurrentUserNameTrait;
-
     public function pageRegionsPageType(){
         return 'main_page';
     }
@@ -28,7 +22,7 @@ class MainPageAction implements
 		return "/";
 	}
 
-	public function currentPageTitle()
+	public function pageTitle()
 	{
 		return 'PHP-PageRegions demo';
 	}
@@ -37,8 +31,8 @@ class MainPageAction implements
 	{
 		$html = '';
 
-        $html .= '<div>' . BT::a(DemoCSGOPageAction::getUrl(), 'Demo CSGO page') . '</div>';
-        $html .= '<div>' . BT::a((new BlocksListAction())->url(), 'Blocks admin') . '</div>';
+        $html .= '<div>' . HTML::a(DemoCSGOPageAction::getUrl(), 'Demo CSGO page') . '</div>';
+        $html .= '<div>' . HTML::a((new BlocksListAction())->url(), 'Blocks admin') . '</div>';
 
 		$html .= '<div class="panel panel-default"><div class="panel-heading">head</div><div class="panel-body">';
 		$html .= PageRegions::renderRegion('head'); // TODO: replace with actual region ID

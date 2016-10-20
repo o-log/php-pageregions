@@ -1,30 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ologinov
- * Date: 17/08/16
- * Time: 19:14
- */
 
 namespace PageRegionsDemo\Pages;
 
-
-use OLOG\Auth\Admin\CurrentUserNameTrait;
-use OLOG\BT\InterfacePageTitle;
-use OLOG\BT\InterfaceUserName;
 use OLOG\Layouts\AdminLayoutSelector;
+use OLOG\Layouts\InterfacePageTitle;
 use OLOG\PageRegions\PageRegions;
 
-class DemoCSGOPageAction implements InterfacePageTitle, InterfaceUserName
+class DemoCSGOPageAction implements
+    InterfacePageTitle
 {
-    use CurrentUserNameTrait;
-
     static public function getUrl()
     {
         return "/csgo";
     }
 
-    public function currentPageTitle()
+    public function pageTitle()
     {
         return 'PHP-PageRegions demo';
     }
