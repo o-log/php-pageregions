@@ -4,7 +4,6 @@ namespace PageRegionsDemo;
 
 use OLOG\Auth\AuthConfig;
 use OLOG\Auth\AuthConstants;
-use OLOG\BT\BTConfig;
 use OLOG\BT\LayoutBootstrap;
 use OLOG\Cache\CacheConfig;
 use OLOG\Cache\MemcacheServerSettings;
