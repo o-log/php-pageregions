@@ -46,15 +46,6 @@ class PageRegionsDemoInitConfig
 
         PageRegionsConfig::setAdminActionsBaseClassname(PageregionsDemoAdminActionsBase::class);
 
-        /*
-		BTConfig::setBreadcrumbsPrefixArr([
-			\OLOG\BT\BT::a('/', '', 'glyphicon glyphicon-home'),
-		]);
-		BTConfig::setMenuClassesArr([
-			PageRegionsAdminMenu::class
-		]);
-        */
-
         LayoutsConfig::setAdminLayoutClassName(LayoutBootstrap::class);
     }
 }
