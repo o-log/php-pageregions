@@ -3,6 +3,7 @@
 namespace PageRegionsDemo\Pages;
 
 use OLOG\HTML;
+use OLOG\InterfaceAction;
 use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\Layouts\InterfacePageTitle;
 use OLOG\PageRegions\Admin\BlocksListAction;
@@ -10,6 +11,7 @@ use OLOG\PageRegions\InterfacePageRegionsPageType;
 use OLOG\PageRegions\PageRegions;
 
 class MainPageAction implements
+    InterfaceAction,
     InterfacePageTitle,
     InterfacePageRegionsPageType
 {
@@ -17,7 +19,7 @@ class MainPageAction implements
         return 'main_page';
     }
 
-	static public function getUrl()
+	public function url()
 	{
 		return "/";
 	}

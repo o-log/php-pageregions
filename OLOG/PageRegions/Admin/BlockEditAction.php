@@ -32,7 +32,11 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
 
     public function topActionObj()
     {
-        // TODO: send to region when block in region
+        $block_obj = Block::factory($this->block_id);
+
+        if ($block_obj->getRegion()){
+            return new RegionBlocksListAction($block_obj->getRegion());
+        }
 
         return new BlocksListAction();
     }
@@ -73,7 +77,7 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
 
         CRUDTable::executeOperations();
 
-        $delete_widget_obj = new CRUDTableWidgetDelete();
+        $delete_widget_obj = new CRUDTableWidgetDelete('Удалить');
         $html .= '<div>' . $delete_widget_obj->html($block_obj) . '</div>';
 
 		$html .= CRUDForm::html(

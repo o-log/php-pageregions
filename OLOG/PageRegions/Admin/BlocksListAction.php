@@ -15,6 +15,7 @@ use OLOG\HTML;
 use OLOG\InterfaceAction;
 use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\Layouts\InterfacePageTitle;
+use OLOG\Layouts\InterfaceTopActionObj;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
@@ -72,11 +73,18 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 		$html .= '</table>';
 		*/
 
+        $html .= '<div class="row">';
+        $html .= '<div class="col-lg-6">';
+
         $html .= '<h2>Регионы</h2>';
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
-		    $html .= '<div>' . HTML::a((new RegionBlocksListAction($region_name))->url(), $region_name) . '</div>';
+            //$html .= HTML::a((new RegionBlocksListAction($region_name))->url(), '<div class="well well-sm">' . $region_name . '</div>');
+            $html .= '<a href="' . (new RegionBlocksListAction($region_name))->url() . '"><div class="well well-sm">' . $region_name . '</div></a>';
         }
+
+        $html .= '</div>';
+        $html .= '<div class="col-lg-6">';
 
         $html .= '<h2>Все блоки</h2>';
 
@@ -117,6 +125,9 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
             [],
             'region, weight'
 		);
+
+        $html .= '</div>';
+        $html .= '</div>';
 
 		AdminLayoutSelector::render($html, $this);
 	}
