@@ -26,20 +26,10 @@ class Block implements
 
     const DB_ID = PageRegionConstants::DB_ID;
     const DB_TABLE_NAME = 'olog_pageregion_block';
-
     const _PAGE_TYPES_FILTER = 'page_types_filter';
+
     protected $page_types_filter;
     protected $id;
-
-    public function getPageTypesFilter(){
-        return $this->page_types_filter;
-    }
-
-    public function setPageTypesFilter($value){
-        $this->page_types_filter = $value;
-    }
-
-
     protected $created_at_ts = 0; // TODO: initialize in constructor
     protected $is_published = 0;
     protected $weight;
@@ -286,5 +276,23 @@ class Block implements
         }
 
         return $content;
+    }
+
+    public function getPageTypesFilter(){
+        return $this->page_types_filter;
+    }
+
+    public function setPageTypesFilter($value){
+        $this->page_types_filter = $value;
+    }
+
+    static public function getIdsArrForRegionByWeightAsc($region)
+    {
+        $ids_arr = \OLOG\DB\DBWrapper::readColumn(
+            self::DB_ID,
+            'select id from ' . self::DB_TABLE_NAME . ' where region = ? order by weight',
+            [$region]
+        );
+        return $ids_arr;
     }
 }

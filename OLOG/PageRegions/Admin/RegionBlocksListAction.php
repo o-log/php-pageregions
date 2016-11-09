@@ -64,19 +64,7 @@ class RegionBlocksListAction extends PageregionsAdminActionsBaseProxy implements
 
         $html .= CRUDTable::html(
             Block::class,
-            CRUDForm::html(
-                $new_block_obj,
-                [
-                    new CRUDFormRow(
-                        'info',
-                        new CRUDFormWidgetInput('info')
-                    ),
-                    new CRUDFormRow(
-                        'Region',
-                        new CRUDFormWidgetInput('region')
-                    )
-                ]
-            ),
+            '',
             [
 	            new CRUDTableColumn(
 		            'ID',
