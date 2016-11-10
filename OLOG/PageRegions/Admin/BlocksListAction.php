@@ -52,7 +52,8 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
                     'Заголовок',
                     new CRUDFormWidgetInput(Block::_INFO)
                 )
-            ]
+            ],
+            (new BlockEditAction('{this->id}'))->url()
         );
 
 
@@ -113,19 +114,18 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
         $html .= '<h2>Регионы</h2>';
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
-            $html .= '<div class="well well-sm"><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a>';
+            $html .= '<div class="panel panel-default">';
+            $html .= '<div class="panel panel-heading"><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a></div>';
+            $html .= '<div class="panel-body">';
             $html .= self::regionBlocksTableHtml($region_name);
-            $html .= '</div>';
+            $html .= '</div></div>';
         }
 
 
-        $html .= '<div class="well well-sm">';
+        $html .= '<div class="panel panel-default">';
+        $html .= '<div class="panel-body">';
         $html .= self::regionBlocksTableHtml('');
-        $html .= '</div>';
-
-
-
-
+        $html .= '</div></div>';
 
 		AdminLayoutSelector::render($html, $this);
 	}
