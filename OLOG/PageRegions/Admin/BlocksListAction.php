@@ -8,8 +8,11 @@ use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetInput;
 use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableColumn;
+use OLOG\CRUD\CRUDTableFilterEqualInvisible;
+use OLOG\CRUD\CRUDTableWidgetDelete;
 use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
+use OLOG\CRUD\CRUDTableWidgetWeight;
 use OLOG\Exits;
 use OLOG\HTML;
 use OLOG\InterfaceAction;
@@ -79,11 +82,18 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
         $html .= '<h2>Регионы</h2>';
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
-            //$html .= HTML::a((new RegionBlocksListAction($region_name))->url(), '<div class="well well-sm">' . $region_name . '</div>');
-            $html .= '<a href="' . (new RegionBlocksListAction($region_name))->url() . '"><div class="well well-sm">' . $region_name . '</div></a>';
+            $html .= '<div class="well well-sm"><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a>';
+            $html .= self::regionBlocksTableHtml($region_name);
+            $html .= '</div>';
         }
 
+
+        $html .= '<div class="well well-sm">';
+        $html .= self::regionBlocksTableHtml('');
         $html .= '</div>';
+        $html .= '</div>';
+
+
         $html .= '<div class="col-lg-6">';
 
         $html .= '<h2>Все блоки</h2>';
@@ -131,4 +141,40 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 
 		AdminLayoutSelector::render($html, $this);
 	}
+
+	static public function regionBlocksTableHtml($region_name) {
+        return  CRUDTable::html(
+            Block::class,
+            '',
+            [
+                new CRUDTableColumn(
+                    'ID',
+                    new CRUDTableWidgetText(
+                        '{this->id}'
+                    )
+                ),
+                new CRUDTableColumn(
+                    'Info',
+                    new CRUDTableWidgetTextWithLink(
+                        '{this->info}',
+                        (new BlockEditAction('{this->id}'))->url()
+                    )
+                ),
+                new CRUDTableColumn(
+                    'Weight',
+                    new CRUDTableWidgetWeight(
+                        ['region' => $region_name]
+                    )
+                ),
+                new CRUDTableColumn(
+                    '',
+                    new CRUDTableWidgetDelete()
+                ),
+            ],
+            [
+                new CRUDTableFilterEqualInvisible('region', $region_name)
+            ],
+            'weight'
+        );
+    }
 }
