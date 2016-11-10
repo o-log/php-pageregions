@@ -18,14 +18,18 @@ use OLOG\HTML;
 use OLOG\InterfaceAction;
 use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\Layouts\InterfacePageTitle;
+use OLOG\Layouts\InterfacePageToolbarHtml;
 use OLOG\Layouts\InterfaceTopActionObj;
+use OLOG\MagnificPopup;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
 
 class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
+    InterfacePageTitle,
+    InterfacePageToolbarHtml,
     InterfaceAction,
-    InterfacePageTitle
+    InterfaceTopActionObj
 {
 	public function url()
 	{
@@ -36,6 +40,33 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 	{
 		return 'Блоки';
 	}
+
+    function pageToolbarHtml()
+    {
+        $html = '';
+
+        $create_form_html = \OLOG\CRUD\CRUDForm::html(
+            new Block(),
+            [
+                new CRUDFormRow(
+                    'Заголовок',
+                    new CRUDFormWidgetInput(Block::_INFO)
+                )
+            ]
+        );
+
+
+        $create_form_element_id = 'collapse_' . rand(1, 999999);
+
+        $html .= MagnificPopup::button($create_form_element_id, 'btn btn-primary btn-sm', '<span class="glyphicon glyphicon-plus"></span>');
+
+        $html .= MagnificPopup::popupHtml(
+            $create_form_element_id,
+            $create_form_html
+        );
+
+        return $html;
+    }
 
 	public function action()
 	{
@@ -76,8 +107,8 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 		$html .= '</table>';
 		*/
 
-        $html .= '<div class="row">';
-        $html .= '<div class="col-lg-6">';
+
+
 
         $html .= '<h2>Регионы</h2>';
 
@@ -91,53 +122,10 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
         $html .= '<div class="well well-sm">';
         $html .= self::regionBlocksTableHtml('');
         $html .= '</div>';
-        $html .= '</div>';
 
 
-        $html .= '<div class="col-lg-6">';
 
-        $html .= '<h2>Все блоки</h2>';
 
-		$new_block_obj = new Block();
-
-		$html .= CRUDTable::html(
-			Block::class,
-			CRUDForm::html(
-				$new_block_obj,
-				[
-					new CRUDFormRow(
-						'info',
-						new CRUDFormWidgetInput('info')
-					)
-				]
-			),
-			[
-				new CRUDTableColumn(
-					'ID',
-					new CRUDTableWidgetText(
-						'{this->id}'
-					)
-				),
-				new CRUDTableColumn(
-					'Region',
-					new CRUDTableWidgetText(
-						'{this->region}'
-					)
-				),
-				new CRUDTableColumn(
-					'Info',
-					new CRUDTableWidgetTextWithLink(
-						'{this->info}',
-                        (new BlockEditAction('{this->id}'))->url()
-					)
-				)
-			],
-            [],
-            'region, weight'
-		);
-
-        $html .= '</div>';
-        $html .= '</div>';
 
 		AdminLayoutSelector::render($html, $this);
 	}
@@ -177,4 +165,5 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
             'weight'
         );
     }
+
 }
