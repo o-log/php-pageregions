@@ -82,20 +82,14 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
         $html .= '<h2>Регионы</h2>';
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
-            $html .= '<a href="' . (new RegionBlocksListAction($region_name))->url() . '"><div class="well well-sm">' . $region_name . '</a>';
-            $block_ids_arr = Block::getIdsArrForRegionByWeightAsc($region_name);
-            if ($block_ids_arr) {
-                $html .= self::blocksTableHtml($region_name);
-            }
+            $html .= '<div class="well well-sm"><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a>';
+            $html .= self::regionBlocksTableHtml($region_name);
             $html .= '</div>';
         }
 
 
         $html .= '<div class="well well-sm">';
-        $block_ids_arr = Block::getIdsArrForRegionByWeightAsc('');
-        if ($block_ids_arr) {
-            $html .= self::blocksTableHtml('');
-        }
+        $html .= self::regionBlocksTableHtml('');
         $html .= '</div>';
         $html .= '</div>';
 
@@ -148,7 +142,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 		AdminLayoutSelector::render($html, $this);
 	}
 
-	static public function blocksTableHtml($region_name) {
+	static public function regionBlocksTableHtml($region_name) {
         return  CRUDTable::html(
             Block::class,
             '',

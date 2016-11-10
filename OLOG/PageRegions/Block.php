@@ -286,6 +286,7 @@ class Block implements
         $this->page_types_filter = $value;
     }
 
+    /*
     static public function getIdsArrForRegionByWeightAsc($region)
     {
         $ids_arr = \OLOG\DB\DBWrapper::readColumn(
@@ -295,4 +296,6 @@ class Block implements
         );
         return $ids_arr;
     }
+    */
+
 }
