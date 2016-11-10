@@ -58,7 +58,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 
         $create_form_element_id = 'collapse_' . rand(1, 999999);
 
-        $html .= MagnificPopup::button($create_form_element_id, 'btn btn-primary btn-sm');
+        $html .= MagnificPopup::button($create_form_element_id, 'btn btn-primary btn-sm', '<span class="glyphicon glyphicon-plus"></span>');
 
         $html .= MagnificPopup::popupHtml(
             $create_form_element_id,
@@ -107,7 +107,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 		$html .= '</table>';
 		*/
 
-        $html .= '<div class="row">';
+
 
 
         $html .= '<h2>Регионы</h2>';
@@ -122,7 +122,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
         $html .= '<div class="well well-sm">';
         $html .= self::regionBlocksTableHtml('');
         $html .= '</div>';
-        $html .= '</div>';
+
 
 
 
