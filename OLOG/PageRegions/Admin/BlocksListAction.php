@@ -110,18 +110,20 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 
 
 
-        $html .= '<h2>Регионы</h2>';
+        //$html .= '<h2>Регионы</h2>';
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
-            $html .= '<div class="well well-sm"><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a>';
+            //$html .= '<div class="well well-sm"><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a>';
+            $html .= '<h2><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a></h2>';
             $html .= self::regionBlocksTableHtml($region_name);
-            $html .= '</div>';
+            //$html .= '</div>';
         }
 
 
-        $html .= '<div class="well well-sm">';
+        //$html .= '<div class="well well-sm">';
+        $html .= '<h2>Неназначенные блоки</h2>';
         $html .= self::regionBlocksTableHtml('');
-        $html .= '</div>';
+        //$html .= '</div>';
 
 
 
@@ -136,20 +138,14 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
             '',
             [
                 new CRUDTableColumn(
-                    'ID',
-                    new CRUDTableWidgetText(
-                        '{this->id}'
-                    )
-                ),
-                new CRUDTableColumn(
-                    'Info',
+                    '',
                     new CRUDTableWidgetTextWithLink(
-                        '{this->info}',
+                        '{this->id}: {this->info}',
                         (new BlockEditAction('{this->id}'))->url()
                     )
                 ),
                 new CRUDTableColumn(
-                    'Weight',
+                    '',
                     new CRUDTableWidgetWeight(
                         ['region' => $region_name]
                     )
