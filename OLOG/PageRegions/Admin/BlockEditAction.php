@@ -77,7 +77,7 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
 
         CRUDTable::executeOperations();
 
-        $delete_widget_obj = new CRUDTableWidgetDelete('Удалить');
+        $delete_widget_obj = new CRUDTableWidgetDelete('Удалить', 'btn btn-default');
         $html .= '<div>' . $delete_widget_obj->html($block_obj) . '</div>';
 
 		$html .= CRUDForm::html(
