@@ -3,6 +3,7 @@
 namespace OLOG\PageRegions\Admin;
 
 use OLOG\Auth\Operator;
+use OLOG\Cache\CacheWrapper;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetAceTextarea;
@@ -19,6 +20,7 @@ use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\Layouts\InterfacePageTitle;
 use OLOG\Layouts\InterfaceTopActionObj;
 use OLOG\PageRegions\Block;
+use OLOG\PageRegions\BlockHelper;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
@@ -76,6 +78,13 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
         }
 
         CRUDTable::executeOperations();
+
+        if ($block_obj->getRegion()) {
+            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($block_obj->getRegion());
+            CacheWrapper::delete($region_cache_key);
+        }
+        $cache_key = BlockHelper::getBlockContentCacheKey($block_id);
+        CacheWrapper::delete($cache_key);
 
         $delete_widget_obj = new CRUDTableWidgetDelete('Удалить');
         $html .= '<div>' . $delete_widget_obj->html($block_obj) . '</div>';
