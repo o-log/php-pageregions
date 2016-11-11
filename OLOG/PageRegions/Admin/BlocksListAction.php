@@ -73,7 +73,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 	{
 		$html = '';
 
-		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
+		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS, Permissions::PERMISSION_SEE_ADMIN_BLOCKS ]));
 
 		/** @var PageRegionsConfig $config_obj */
 		/*
