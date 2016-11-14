@@ -110,6 +110,19 @@ class Block implements
         self::removeObjFromCacheById($this->getId());
     }
 
+    public function afterSave() {
+        $cache_key = BlockHelper::getBlockContentCacheKey($this->getId());
+        CacheWrapper::delete($cache_key);
+
+        if ($this instanceof InterfaceFactory) {
+            $this->removeFromFactoryCache();
+        }
+
+        if ($this->getRegion()) {
+            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
+            CacheWrapper::delete($region_cache_key);
+        }
+    }
 
     /**
      * Был ли загружен блок
