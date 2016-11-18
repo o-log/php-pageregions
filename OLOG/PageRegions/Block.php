@@ -79,7 +79,9 @@ class Block implements
         $cache_key = BlockHelper::getBlockContentCacheKey($this->getId());
         CacheWrapper::delete($cache_key);
 
-        if ($this->getRegion()) {
+        $region = self::getOldRegion();
+
+        if ($region) {
             $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
             CacheWrapper::delete($region_cache_key);
         }
@@ -272,6 +274,12 @@ class Block implements
 
     public function setPageTypesFilter($value){
         $this->page_types_filter = $value;
+    }
+
+    public function canDelete(&$message)
+    {
+        $this->getOldRegion();
+        return true;
     }
 
     /*
