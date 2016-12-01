@@ -2,47 +2,38 @@
 namespace OLOG\PageRegions\Admin;
 
 use OLOG\InterfaceAction;
+use OLOG\Layouts\LayoutJSON;
 use OLOG\PageRegions\Block;
 use OLOG\POSTAccess;
 
 class SearchAjax implements InterfaceAction {
 
-    const SEARCH_FIELD_INFO = 'search_field_info';
-    const SEARCH_FIELD_BODY = 'search_field_body';
+    const SEARCH_FIELD = 'search_field';
 
     public function url()  {
         return '/admin/search_ajax/';
     }
 
     public function action() {
-        $info = POSTAccess::getOptionalPostValue(self::SEARCH_FIELD_INFO);
-        $body = POSTAccess::getOptionalPostValue(self::SEARCH_FIELD_BODY);
-        $query = [];
-        $params = [];
-        if (trim($info)) {
-            $query[] = 'info like ?';
-            $params[] = '%' . $info . '%';
-        }
-
-        if (trim($body)) {
-            $query[] = 'body like ?';
-            $params[] = '%' . $body . '%';
-        }
-
-        $query = implode(' AND ',  $query);
-
-        $ids_arr =  Block::getIdsArrForSearchQuery($query, $params);
+        $query = POSTAccess::getOptionalPostValue(self::SEARCH_FIELD);
+        $ids_arr =  Block::getIdsArrForSearchQuery($query);
 
         $content_html = '';
         foreach ($ids_arr as $id) {
             $block = Block::factory($id);
             $action = (new BlockEditAction($id))->url();
-            $content_html .= "<li><a href='".  $action ."'>".$block->getInfo()."</a> </li>";
+
+            $query = preg_quote($query);
+
+            $body = '';
+            if (preg_match("#(.{0,100}" . $query . ".{0,100})#im",$block->getBody(), $p)) {
+                $body = $p[1];
+            }
+
+            $content_html .= "<li><a href='".  $action ."'>".$block->getInfo()."</a> <div style='color:#CCC; font-size:10px'>" . $body ."</div> </li>";
         }
 
         $content = ['success' => true, 'html' => $content_html];
-
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode($content);
+        LayoutJSON::render($content, $this);
     }
 }

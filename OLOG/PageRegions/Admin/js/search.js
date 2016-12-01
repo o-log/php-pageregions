@@ -1,14 +1,12 @@
 $( document ).ready(function() {
     $('#search_form').on("change keyup input click", 'input', function() {
-        var info = $( "input[name=<?=search_field_info?>]" ).val();
-        var body = $( "input[name=<?=search_field_body?>]" ).val();
+        var query = $( "input[name=<?=$search_field?>]" ).val();
 
-        if(info.length >=2 || body.length >=2)
-        {
+        if(query.length >=2) {
             $.ajax({
                 type: 'post',
                 url: "/admin/search_ajax/",
-                data: {'<?=$search_field_info?>': info, '<?=$search_field_body?>': body},
+                data: {'<?=$search_field?>': query},
                 response: "json",
                 success: function (data) {
                     $(".search_result").html(data.html).fadeIn();

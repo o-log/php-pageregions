@@ -11,14 +11,12 @@ class SearchForm {
         <script>
             <?= Render::callLocaltemplate('js/search.js',
                 [
-                    'search_field_info' => SearchAjax::SEARCH_FIELD_INFO,
-                    'search_field_body' => SearchAjax::SEARCH_FIELD_BODY,
+                    'search_field' => SearchAjax::SEARCH_FIELD,
                 ]);?>
         </script>
 
         <div id="search_form">
-            <input type="text" name="<?=SearchAjax::SEARCH_FIELD_INFO ?>" placeholder="Название" value=""  autocomplete="off">
-            <input type="text" name="<?=SearchAjax::SEARCH_FIELD_BODY ?>" placeholder="Body" value="" autocomplete="off">
+            <input type="text" name="<?=SearchAjax::SEARCH_FIELD ?>" placeholder="Поиск" value="" autocomplete="off">
         </div>
         <ul class="search_result"></ul>
 
