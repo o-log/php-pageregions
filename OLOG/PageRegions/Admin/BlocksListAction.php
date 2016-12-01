@@ -74,6 +74,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 		$html = '';
 
 		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
+        $html .= SearchForm::html();
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
             $html .= '<h2><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a></h2>';

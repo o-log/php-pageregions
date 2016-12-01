@@ -299,4 +299,13 @@ class Block implements
     }
     */
 
+    static public function getIdsArrForSearchQuery($body_query, $params) {
+        $ids_arr = DBWrapper::readColumn(
+            Block::DB_ID,
+            'select id from ' . self::DB_TABLE_NAME . ' where ' . $body_query,
+            $params
+        );
+
+        return $ids_arr;
+    }
 }
