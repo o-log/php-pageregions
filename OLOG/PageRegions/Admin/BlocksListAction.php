@@ -26,6 +26,7 @@ use OLOG\MagnificPopup;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
+use OLOG\Render;
 
 class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
     InterfacePageTitle,
@@ -77,37 +78,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 
 		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
 
-        $html = CRUDTable::html(
-            Block::class,
-            '',
-            [
-                new CRUDTableColumn(
-                    '',
-                    new CRUDTableWidgetTextWithLink(
-                        '{this->id}: {this->info}',
-                        (new BlockEditAction('{this->id}'))->url()
-                    )
-                ),
-                new CRUDTableColumn(
-                    '',
-                    new CRUDTableWidgetText(
-                        '{this->body}'
-                    )
-                ),
-                new CRUDTableColumn(
-                    '',
-                    new CRUDTableWidgetDelete()
-                ),
-            ],
-            [
-                new CRUDTableFilterLikeInline('3748t7t123145gdfg', 'поиск', 'body')
-            ],
-            'weight',
-            '872642312338755234',
-            CRUDTable::FILTERS_POSITION_INLINE,
-            true
-        );
-
+        $html .= SearchForm::html();
 
 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
             $html .= '<h2><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a></h2>';
