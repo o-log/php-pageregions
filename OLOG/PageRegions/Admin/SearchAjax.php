@@ -22,9 +22,6 @@ class SearchAjax implements InterfaceAction {
         foreach ($ids_arr as $id) {
             $block = Block::factory($id);
             $action = (new BlockEditAction($id))->url();
-
-
-
             $body = '';
             if (preg_match("#(.{0,100}" . $query . ".{0,100})#im",$block->getBody(), $p)) {
                 $body = $p[1];
