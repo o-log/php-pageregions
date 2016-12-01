@@ -3,6 +3,7 @@
 namespace OLOG\PageRegions\Admin;
 
 use OLOG\Auth\Operator;
+use OLOG\Cache\CacheWrapper;
 use OLOG\CRUD\CRUDForm;
 use OLOG\CRUD\CRUDFormRow;
 use OLOG\CRUD\CRUDFormWidgetAceTextarea;
@@ -19,6 +20,7 @@ use OLOG\Layouts\AdminLayoutSelector;
 use OLOG\Layouts\InterfacePageTitle;
 use OLOG\Layouts\InterfaceTopActionObj;
 use OLOG\PageRegions\Block;
+use OLOG\PageRegions\BlockHelper;
 use OLOG\PageRegions\PageRegionConstants;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;

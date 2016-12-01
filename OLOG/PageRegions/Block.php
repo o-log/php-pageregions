@@ -42,15 +42,14 @@ class Block implements
     protected $visible_only_for_administrators = 0;
     protected $execute_pseudocode = 0;
 
-    public function beforeSave(){
+    public function beforeSave() {
         $this->initWeight(['region' => $this->getRegion()]);
 
-        $old_region = $this->getOldGegion();
+        $old_region = $this->getOldRegion();
 
         if ($old_region != $this->getRegion()){
             $this->setWeightRegion();
         }
-        $this->dropCache();
     }
 
     public function setWeightRegion(){
@@ -59,8 +58,7 @@ class Block implements
         $this->setWeight($max_weight_in_new_region + 1);
     }
 
-    protected function getOldGegion(){
-
+    protected function getOldRegion() {
         static $old_region;
         static $has_old_region_in_cache = false;
 
@@ -78,38 +76,29 @@ class Block implements
     }
 
     public function dropCache(){
+        $cache_key = BlockHelper::getBlockContentCacheKey($this->getId());
+        CacheWrapper::delete($cache_key);
 
-        if (!is_null($this->getId())){
+        $region = self::getOldRegion();
 
-            CacheWrapper::delete( BlockHelper::getBlockContentCacheKey( $this->getId()) );
-            $old_region = $this->getOldGegion();
-            if ($old_region != $this->getRegion()){
-                $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
-                CacheWrapper::delete($key);
-            }
-
+        if ($region) {
+            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
+            CacheWrapper::delete($region_cache_key);
         }
-
-        $key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
-        CacheWrapper::delete($key);
     }
 
-    /*
-    public static function afterUpdate($id)
-    {
-        self::removeObjFromCacheById($id);
-
-        $block_obj = Block::factory($id);
-        Logger::logObjectEvent($block_obj, 'изменение');
-    }
-      */
-
-    public function afterDelete()
-    {
+    public function afterDelete() {
         self::dropCache();
         self::removeObjFromCacheById($this->getId());
     }
 
+    public function afterSave() {
+        if ($this instanceof InterfaceFactory) {
+            $this->removeFromFactoryCache();
+        }
+
+        self::dropCache();
+    }
 
     /**
      * Был ли загружен блок
@@ -285,6 +274,12 @@ class Block implements
 
     public function setPageTypesFilter($value){
         $this->page_types_filter = $value;
+    }
+
+    public function canDelete(&$message)
+    {
+        $this->getOldRegion();
+        return true;
     }
 
     /*
