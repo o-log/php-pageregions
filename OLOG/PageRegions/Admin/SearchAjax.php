@@ -1,10 +1,13 @@
 <?php
 namespace OLOG\PageRegions\Admin;
 
+use OLOG\Exits;
 use OLOG\InterfaceAction;
 use OLOG\Layouts\LayoutJSON;
 use OLOG\PageRegions\Block;
+use OLOG\PageRegions\Permissions;
 use OLOG\POSTAccess;
+use OLOG\Auth\Operator;
 
 class SearchAjax implements InterfaceAction {
 
@@ -15,6 +18,7 @@ class SearchAjax implements InterfaceAction {
     }
 
     public function action() {
+        Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
         $query = POSTAccess::getOptionalPostValue(self::SEARCH_FIELD);
         $ids_arr =  Block::getIdsArrForSearchQuery($query);
         $query = preg_quote($query);
