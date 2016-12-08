@@ -18,7 +18,7 @@ class SearchForm {
         <div id="search_form">
             <input type="text" name="<?=SearchAjax::SEARCH_FIELD ?>" placeholder="Поиск" value="" autocomplete="off">
         </div>
-        <ul class="search_result"></ul>
+        <div class="search_result"></div>
 
 
         <?php

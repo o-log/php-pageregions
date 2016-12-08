@@ -24,13 +24,14 @@ class SearchAjax implements InterfaceAction {
             $action = (new BlockEditAction($id))->url();
             $body = '';
             $p = [];
-            if (preg_match_all("#(.{0,50}" . $query . ".{0,50})#uim", $block->getBody(), $p)) {
-                $body .= "<pre>" . $p[1][0] . "</pre>";
+            if (preg_match_all("#(.{0,20}" . $query . ".{0,20})#ui", $block->getBody(), $p)) {
                 foreach ($p[1] as $match) {
-                   $body .= "<pre>" . $match . "</pre>";
+                   $match = preg_replace("#" . $query . "#ui", '<b>' . $query . '</b>', htmlentities($match));
+                   $body .= "<div>" . $match . "</div>";
                 }
             }
-            $content_html .= "<li><a href='".  $action ."'>".$block->getInfo()."</a> " . "#(.{0,50}" . $query . ".{0,50})#im" . " <div style='color:#CCC; font-size:10px'>" . $body ."</div> </li>";
+
+            $content_html .= "<div style='padding-bottom: 10px'><div><a href='".  $action ."'>".$block->getInfo()."</a></div> <div>" . $body ."</div></div>";
         }
 
         $content = ['success' => true, 'html' => $content_html];
