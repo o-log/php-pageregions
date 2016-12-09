@@ -11,4 +11,5 @@ array(
 'alter table olog_pageregion_block add column execute_pseudocode int not null default 0 /* rand0993453 */;',
 'insert into olog_auth_permission (title) values ("PERMISSION_PAGEREGIONS_MANAGE_BLOCKS") /* 87673455 */;',
 'alter table olog_pageregion_block add column page_types_filter text    /* rand837262 */;',
+'insert into olog_auth_permission (title) values ("PERMISSION_SEE_ADMIN_BLOCKS") /* rand2652403456991239 */;'
 )

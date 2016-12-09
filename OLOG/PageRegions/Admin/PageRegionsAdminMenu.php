@@ -13,7 +13,7 @@ class PageRegionsAdminMenu implements InterfaceMenu
 	{
 	    $menu_arr = [];
 
-        if (Auth::currentUserHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS, Permissions::PERMISSION_SEE_ADMIN_BLOCKS])) {
+        if (Auth::currentUserHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS])) {
 
             $menu_arr = array_merge($menu_arr, [
                 new MenuItem((new BlocksListAction())->pageTitle(), (new BlocksListAction())->url(), [], 'glyphicon glyphicon-pushpin')
