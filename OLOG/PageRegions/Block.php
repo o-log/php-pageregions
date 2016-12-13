@@ -58,9 +58,6 @@ class Block implements
         $this->setWeight($max_weight_in_new_region + 1);
     }
 
-    /**
-     * сохраняем регион в статической переменной, чтобы получить его после удаления объекта.
-     */
     protected function getOldRegion() {
         static $old_region;
         static $has_old_region_in_cache = false;
@@ -280,6 +277,7 @@ class Block implements
 
     public function canDelete(&$message)
     {
+        #сохраняем регион в статической переменной, чтобы получить его после удаления объекта.
         $this->getOldRegion();
         return true;
     }
