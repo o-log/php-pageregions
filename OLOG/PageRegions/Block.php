@@ -293,4 +293,14 @@ class Block implements
         return $ids_arr;
     }
     */
+
+    static public function getIdsArrForSearchQuery($query) {
+        $ids_arr = DBWrapper::readColumn(
+            Block::DB_ID,
+            'select id from ' . self::DB_TABLE_NAME . ' where  body like ? OR info like ?',
+            ['%' . $query . '%', '%' . $query . '%']
+        );
+
+        return $ids_arr;
+    }
 }
