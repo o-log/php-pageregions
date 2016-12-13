@@ -82,7 +82,7 @@ class Block implements
         $region = self::getOldRegion();
 
         if ($region) {
-            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
+            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($region);
             CacheWrapper::delete($region_cache_key);
         }
     }
