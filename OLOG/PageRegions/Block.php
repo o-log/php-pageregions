@@ -27,6 +27,7 @@ class Block implements
     const DB_ID = PageRegionConstants::DB_ID;
     const DB_TABLE_NAME = 'olog_pageregion_block';
     const _PAGE_TYPES_FILTER = 'page_types_filter';
+    const _VISIBLE_ONLY_FOR_ADMINISTRATORS = 'visible_only_for_administrators';
     const _INFO = 'info';
 
     protected $page_types_filter;

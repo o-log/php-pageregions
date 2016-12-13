@@ -153,6 +153,10 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
 					'Cache',
 					new CRUDFormWidgetOptions('cache', PageRegionConstants::CACHE_ARR)
 				),
+                new CRUDFormRow(
+                    'Visible only for administrators',
+                    new CRUDFormWidgetOptions(Block::_VISIBLE_ONLY_FOR_ADMINISTRATORS, [0 => 'Нет', 1 => 'Да'])
+                ),
 			]
 		);
 
