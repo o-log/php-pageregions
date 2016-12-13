@@ -58,6 +58,9 @@ class Block implements
         $this->setWeight($max_weight_in_new_region + 1);
     }
 
+    /**
+     * сохраняем регион в статической переменной, чтобы получить его после удаления объекта.
+     */
     protected function getOldRegion() {
         static $old_region;
         static $has_old_region_in_cache = false;
@@ -79,12 +82,14 @@ class Block implements
         $cache_key = BlockHelper::getBlockContentCacheKey($this->getId());
         CacheWrapper::delete($cache_key);
 
-        $region = self::getOldRegion();
-
-        if ($region) {
-            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($region);
+        $old_region = self::getOldRegion();
+        if ($old_region != $this->getRegion()) {
+            $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($old_region);
             CacheWrapper::delete($region_cache_key);
         }
+
+        $region_cache_key = BlockHelper::getBlocksIdsArrInRegionCacheKey($this->getRegion());
+        CacheWrapper::delete($region_cache_key);
     }
 
     public function afterDelete() {
@@ -93,10 +98,7 @@ class Block implements
     }
 
     public function afterSave() {
-        if ($this instanceof InterfaceFactory) {
-            $this->removeFromFactoryCache();
-        }
-
+        $this->removeFromFactoryCache();
         self::dropCache();
     }
 
