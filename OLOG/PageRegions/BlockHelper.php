@@ -2,6 +2,8 @@
 
 namespace OLOG\PageRegions;
 
+use OLOG\Auth\Operator;
+use OLOG\Auth\OperatorPermission;
 use OLOG\Cache\CacheWrapper;
 
 class BlockHelper
@@ -69,14 +71,7 @@ class BlockHelper
      */
     public static function currentUserHasAccessToBlocksForAdministrators()
     {
-        // TODO: rewrite
-        /*
-        return OperatorHelper::currentOperatorHasAnyOfPermissions(array(
-            OperatorPermission::PERMISSION_EDIT_BLOCK,
-            OperatorPermission::PERMISSION_EDIT_ARTICLE_NODE_CONTENT,
-            OperatorPermission::PERMISSION_EDIT_PAGE_NODE_CONTENT
-        ));
-        */
+        return Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_SEE_ADMIN_BLOCKS]);
     }
 
     /**

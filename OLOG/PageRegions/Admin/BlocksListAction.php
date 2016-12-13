@@ -9,6 +9,8 @@ use OLOG\CRUD\CRUDFormWidgetInput;
 use OLOG\CRUD\CRUDTable;
 use OLOG\CRUD\CRUDTableColumn;
 use OLOG\CRUD\CRUDTableFilterEqualInvisible;
+use OLOG\CRUD\CRUDTableFilterLike;
+use OLOG\CRUD\CRUDTableFilterLikeInline;
 use OLOG\CRUD\CRUDTableWidgetDelete;
 use OLOG\CRUD\CRUDTableWidgetText;
 use OLOG\CRUD\CRUDTableWidgetTextWithLink;
@@ -24,6 +26,7 @@ use OLOG\MagnificPopup;
 use OLOG\PageRegions\Block;
 use OLOG\PageRegions\PageRegionsConfig;
 use OLOG\PageRegions\Permissions;
+use OLOG\Render;
 
 class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
     InterfacePageTitle,
@@ -76,7 +79,7 @@ class BlocksListAction extends PageregionsAdminActionsBaseProxy implements
 		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
         $html .= SearchForm::html();
 
-		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
+ 		foreach (PageRegionsConfig::getRegionsArr() as $region_name){
             $html .= '<h2><a href="' . (new RegionBlocksListAction($region_name))->url() . '">' . $region_name . '</a></h2>';
             $html .= self::regionBlocksTableHtml($region_name);
         }
