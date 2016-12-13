@@ -155,7 +155,7 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
 				),
                 new CRUDFormRow(
                     'Visible only for administrators',
-                    new CRUDFormWidgetOptions(Block::_VISIBLE_ONLY_FOR_ADMINISTRATORS, ['Нет', 'Да'])
+                    new CRUDFormWidgetOptions(Block::_VISIBLE_ONLY_FOR_ADMINISTRATORS, [0 => 'Нет', 1 => 'Да'])
                 ),
 			]
 		);
