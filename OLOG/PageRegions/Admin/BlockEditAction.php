@@ -162,7 +162,7 @@ class BlockEditAction extends PageregionsAdminActionsBaseProxy implements
 
         $html .= '<h2>Rendered block</h2>';
 
-        $html .= '<div style="border: 5px solid red;">';
+        $html .= '<div style="position: relative;border: 5px solid red;">';
         $html .= $block_obj->renderBlockContent();
         $html .= '</div>';
 
