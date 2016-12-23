@@ -16,12 +16,6 @@
 				url: '<?= $search_action ?>',
 				data: data,
 				response: "json",
-				beforeSend: function () {
-					OLOG.preloader.show();
-				},
-				complete: function () {
-					OLOG.preloader.hide();
-				},
 				success: function (response) {
 					$result.html(response.html);
 				}
