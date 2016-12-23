@@ -1,17 +1,33 @@
-$( document ).ready(function() {
-    $('#search_form').on("change keyup input click", 'input', function() {
-        var query = $( "input[name=<?=$search_field?>]" ).val();
+(function () {
+	$input = $('#<?= $search_input_id ?>');
+	$result = $('<div id="result" class="search_result"/>');
 
-        if(query.length >=2) {
-            $.ajax({
-                type: 'post',
-                url: "/admin/search_ajax/",
-                data: {'<?=$search_field?>': query},
-                response: "json",
-                success: function (data) {
-                    $(".search_result").html(data.html).fadeIn();
-                }
-            })
-        }
-    })
-});
+	$input.after($result);
+
+	$input.on('keyup', function () {
+		var query = $(this).val();
+		var name = $(this).attr('name');
+		var data = {};
+		data[name] = query;
+
+		if (query.length >= 2) {
+			$.ajax({
+				type: 'post',
+				url: '<?= $search_action ?>',
+				data: data,
+				response: "json",
+				beforeSend: function () {
+					OLOG.preloader.show();
+				},
+				complete: function () {
+					OLOG.preloader.hide();
+				},
+				success: function (response) {
+					$result.html(response.html);
+				}
+			});
+		} else {
+			$result.empty();
+		}
+	});
+})();
