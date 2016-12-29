@@ -22,9 +22,9 @@ class SearchAjax implements InterfaceAction
 	public function action()
 	{
 		Exits::exit403If(!Operator::currentOperatorHasAnyOfPermissions([Permissions::PERMISSION_PAGEREGIONS_MANAGE_BLOCKS]));
-		$query = POSTAccess::getOptionalPostValue(self::SEARCH_FIELD);
-		$ids_arr = Block::getIdsArrForSearchQuery($query);
-		$query = preg_quote($query);
+		$query_raw = POSTAccess::getOptionalPostValue(self::SEARCH_FIELD);
+		$ids_arr = Block::getIdsArrForSearchQuery($query_raw);
+		$query = preg_quote($query_raw);
 		$content_html = '';
 		foreach ($ids_arr as $id) {
 			$block = Block::factory($id);
@@ -33,7 +33,7 @@ class SearchAjax implements InterfaceAction
 			$p = [];
 			if (preg_match_all("#(.{0,20}" . $query . ".{0,20})#ui", $block->getBody(), $p)) {
 				foreach ($p[1] as $match) {
-					$match = preg_replace("#" . $query . "#ui", '<b>' . $query . '</b>', htmlentities($match));
+					$match = preg_replace("#" . $query . "#ui", '<b>' . $query_raw . '</b>', htmlentities($match));
 					$body .= "<div>" . $match . "</div>";
 				}
 			}
