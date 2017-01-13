@@ -67,7 +67,7 @@ class Pseudocode
 
                 $result = '';
 
-                error_log("Catched exception '(Catched) " . $exception->getMessage() . "'\n" . $exception->getTraceAsString());
+                error_log("PHP Fatal error: Catched exception '(Catched) " . $exception->getMessage() . "'\n" . $exception->getTraceAsString());
             }
 
             $text = str_replace($matches[0][$key], $result, $text);
